@@ -1,0 +1,44 @@
+﻿<div id="new-transaction-page" class="page">
+  <h2 class="page-header">New transaction</h2>
+  <form action="#" method="post" novalidate>
+    <div>
+      <div class="control-group">
+        <label for="new-transaction-date">Date</label>
+        <div class="controls">
+          <input type="datetime" id="new-transaction-date" name="postedAt" />
+        </div>
+      </div>
+      <div class="control-group">
+        <label for="new-transaction-payee">Payee</label>
+        <div class="controls">
+          <input type="text" id="new-transaction-payee" name="payee" />
+        </div>
+      </div>
+      <div class="control-group">
+        <label for="new-transaction-notes">Notes</label>
+        <div class="controls">
+          <textarea id="new-transaction-notes" name="notes"></textarea>
+        </div>
+      </div>
+      <div class="control-group">
+        <label for="new-transaction-category">Category</label>
+        <div class="controls">
+          <select id="new-transaction-category" name="categoryId"></select>
+        </div>
+      </div>
+      <div class="control-group">
+        <label for="new-transaction-amount">Amount</label>
+        <div class="controls">
+          <div class="input-prepend ">
+            <span id="new-transaction-currency" class="add-on"></span>
+            <input type="number" id="new-transaction-amount" name="amount" class="input-small money" value="0.00" min="0" step="any" />
+          </div>
+        </div>
+      </div>
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary">Save</button>
+        <a class="btn" href="#">Cancel</a>
+      </div>
+    </div>
+  </form>
+</div>

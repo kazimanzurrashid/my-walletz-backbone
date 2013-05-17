@@ -1,0 +1,54 @@
+﻿@using MyWalletz
+@using MyWalletz.Helpers
+@using MyWalletz.Models
+<div id="new-account-page" class="page">
+  <h2 class="page-header">New account</h2>
+  <form action="#" method="post" novalidate>
+    <div>
+      <div class="control-group">
+        <label for="new-account-title">Title</label>
+        <div class="controls">
+          <input type="text" id="new-account-title" name="title" />
+        </div>
+      </div>
+      <div class="control-group">
+        <label for="new-account-notes">Notes</label>
+        <div class="controls">
+          <textarea id="new-account-notes" name="notes"></textarea>
+        </div>
+      </div>
+      <div class="control-group">
+        <label for="new-account-type">Type</label>
+        <div class="controls">
+          <select id="new-account-type" name="type">
+            <option value="">[select]</option>
+            @foreach (var item in this.SelectListItems<AccountType>()) {
+              <option value="@item.Value">@item.Text</option>
+            }
+          </select>
+        </div>
+      </div>
+      <div class="control-group">
+        <label for="new-account-balance">Balance</label>
+        <div class="controls">
+          <input type="number" id="new-account-balance" name="balance" class="input-small money" value="0.00" min="0" step="any" />
+        </div>
+      </div>
+      <div class="control-group">
+        <label for="new-account-currency">Currency</label>
+        <div class="controls">
+          <select id="new-account-currency" name="currency">
+            <option value="">[select]</option>
+            @foreach (var item in new CurrencyList().AsSelectListItems()) {
+              <option value="@item.Value">@item.Text</option>
+            }
+          </select>
+        </div>
+      </div>
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary">Save</button>
+        <a class="btn" href="@Url.ClientUrl("/accounts")">Cancel</a>
+      </div>
+    </div>
+  </form>
+</div>

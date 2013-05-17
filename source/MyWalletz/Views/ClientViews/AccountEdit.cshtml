@@ -1,0 +1,45 @@
+﻿@using MyWalletz
+@using MyWalletz.Helpers
+<div id="edit-account-page" class="page">
+  <h2 class="page-header">Edit account</h2>
+  <form action="#" method="post" novalidate>
+    <div>
+      <div class="control-group">
+        <label for="edit-account-title">Title</label>
+        <div class="controls">
+          <input type="text" id="edit-account-title" name="title" />
+        </div>
+      </div>
+      <div class="control-group">
+        <label for="edit-account-notes">Notes</label>
+        <div class="controls">
+          <textarea id="edit-account-notes" name="notes"></textarea>
+        </div>
+      </div>
+      <div class="control-group">
+        <label for="edit-account-type">Type</label>
+        <div class="controls">
+          <select id="edit-account-type" name="type">
+            <option value="">[select]</option>
+            @foreach (var item in this.SelectListItems<AccountType>()) {
+              <option value="@item.Value">@item.Text</option>
+            }
+          </select>
+        </div>
+      </div>
+      <div class="control-group">
+        <label>Balance</label>
+        <div class="controls">
+          <div class="input-prepend ">
+            <span id="edit-account-currency" class="add-on"></span>
+            <span id="edit-account-balance" class="input-small uneditable-input money"></span>
+          </div>
+        </div>
+      </div>
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary">Save</button>
+        <a class="btn" href="@Url.ClientUrl("/accounts")">Cancel</a>
+      </div>
+    </div>
+  </form>
+</div>
