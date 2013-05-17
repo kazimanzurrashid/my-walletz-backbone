@@ -42,7 +42,7 @@
             e.preventDefault();
             this.form.hideFieldErrors();
 
-            View.Helpers.subscribeModelInvalidEvent(this.model, this.form);
+            Views.Helpers.subscribeModelInvalidEvent(this.model, this.form);
 
             var self = this;
 

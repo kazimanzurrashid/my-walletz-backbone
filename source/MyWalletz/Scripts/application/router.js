@@ -145,7 +145,7 @@ var Application;
             });
         },
 
-        editAccount: function() {
+        editAccount: function(id) {
             var self = this;
             this.ensureSignedIn(function() {
                 var account = self.context.getAccount(id);
