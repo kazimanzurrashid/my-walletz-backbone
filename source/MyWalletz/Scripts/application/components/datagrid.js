@@ -183,9 +183,9 @@
             });
 
             this.listenTo(row, 'removing', function() {
-                var index = _.indexOf(self.rows, row);
+                var index = _.indexOf(self.dataRows, row);
                 self.stopListening(row);
-                self.rows.splice(index, 1);
+                self.dataRows.splice(index, 1);
             });
 
             row.render()
