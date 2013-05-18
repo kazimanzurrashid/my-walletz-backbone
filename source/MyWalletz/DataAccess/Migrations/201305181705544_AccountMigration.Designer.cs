@@ -11,7 +11,7 @@ namespace MyWalletz.DataAccess.Migrations
         
         string IMigrationMetadata.Id
         {
-            get { return "201305151506256_AccountMigration"; }
+            get { return "201305181705544_AccountMigration"; }
         }
         
         string IMigrationMetadata.Source

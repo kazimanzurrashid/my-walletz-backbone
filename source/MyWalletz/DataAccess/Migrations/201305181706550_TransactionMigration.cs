@@ -1,7 +1,7 @@
 namespace MyWalletz.DataAccess.Migrations
 {
     using System.Data.Entity.Migrations;
-    
+
     public partial class TransactionMigration : DbMigration
     {
         public override void Up()

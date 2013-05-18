@@ -175,23 +175,23 @@
     <Compile Include="Infrastructure\MailUrlResolver.cs" />
     <Compile Include="Infrastructure\SeedDataLoader.cs" />
     <Compile Include="Infrastructure\UrlSafeSecureDataSerializer.cs" />
-    <Compile Include="DataAccess\Migrations\201305151502519_UserMigration.cs" />
-    <Compile Include="DataAccess\Migrations\201305151502519_UserMigration.Designer.cs">
-      <DependentUpon>201305151502519_UserMigration.cs</DependentUpon>
-    </Compile>
-    <Compile Include="DataAccess\Migrations\201305151505051_CategoryMigration.cs" />
-    <Compile Include="DataAccess\Migrations\201305151505051_CategoryMigration.Designer.cs">
-      <DependentUpon>201305151505051_CategoryMigration.cs</DependentUpon>
-    </Compile>
-    <Compile Include="DataAccess\Migrations\201305151506256_AccountMigration.cs" />
-    <Compile Include="DataAccess\Migrations\201305151506256_AccountMigration.Designer.cs">
-      <DependentUpon>201305151506256_AccountMigration.cs</DependentUpon>
-    </Compile>
-    <Compile Include="DataAccess\Migrations\201305151509256_TransactionMigration.cs" />
-    <Compile Include="DataAccess\Migrations\201305151509256_TransactionMigration.Designer.cs">
-      <DependentUpon>201305151509256_TransactionMigration.cs</DependentUpon>
-    </Compile>
     <Compile Include="DataAccess\Migrations\Configuration.cs" />
+    <Compile Include="DataAccess\Migrations\201305181703115_UserMigration.cs" />
+    <Compile Include="DataAccess\Migrations\201305181703115_UserMigration.Designer.cs">
+      <DependentUpon>201305181703115_UserMigration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DataAccess\Migrations\201305181704458_CategoryMigration.cs" />
+    <Compile Include="DataAccess\Migrations\201305181704458_CategoryMigration.Designer.cs">
+      <DependentUpon>201305181704458_CategoryMigration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DataAccess\Migrations\201305181705544_AccountMigration.cs" />
+    <Compile Include="DataAccess\Migrations\201305181705544_AccountMigration.Designer.cs">
+      <DependentUpon>201305181705544_AccountMigration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DataAccess\Migrations\201305181706550_TransactionMigration.cs" />
+    <Compile Include="DataAccess\Migrations\201305181706550_TransactionMigration.Designer.cs">
+      <DependentUpon>201305181706550_TransactionMigration.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\ChangePassword.cs" />
     <Compile Include="Models\CreateAccount.cs" />
     <Compile Include="Models\CreateCategory.cs" />
@@ -433,19 +433,20 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="DataAccess\Migrations\201305151502519_UserMigration.resx">
-      <DependentUpon>201305151502519_UserMigration.cs</DependentUpon>
+    <EmbeddedResource Include="DataAccess\Migrations\201305181703115_UserMigration.resx">
+      <DependentUpon>201305181703115_UserMigration.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="DataAccess\Migrations\201305151505051_CategoryMigration.resx">
-      <DependentUpon>201305151505051_CategoryMigration.cs</DependentUpon>
+    <EmbeddedResource Include="DataAccess\Migrations\201305181704458_CategoryMigration.resx">
+      <DependentUpon>201305181704458_CategoryMigration.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="DataAccess\Migrations\201305151506256_AccountMigration.resx">
-      <DependentUpon>201305151506256_AccountMigration.cs</DependentUpon>
+    <EmbeddedResource Include="DataAccess\Migrations\201305181705544_AccountMigration.resx">
+      <DependentUpon>201305181705544_AccountMigration.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="DataAccess\Migrations\201305151509256_TransactionMigration.resx">
-      <DependentUpon>201305151509256_TransactionMigration.cs</DependentUpon>
+    <EmbeddedResource Include="DataAccess\Migrations\201305181706550_TransactionMigration.resx">
+      <DependentUpon>201305181706550_TransactionMigration.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

@@ -5,13 +5,13 @@ namespace MyWalletz.DataAccess.Migrations
     using System.Data.Entity.Migrations.Infrastructure;
     using System.Resources;
     
-    public sealed partial class UserMigration : IMigrationMetadata
+    public sealed partial class TransactionMigration : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(UserMigration));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(TransactionMigration));
         
         string IMigrationMetadata.Id
         {
-            get { return "201305151502519_UserMigration"; }
+            get { return "201305181706550_TransactionMigration"; }
         }
         
         string IMigrationMetadata.Source
