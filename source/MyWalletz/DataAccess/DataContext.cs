@@ -25,8 +25,15 @@
         private IDbSet<User> users;
         private IDbSet<Category> categories; 
         private IDbSet<Account> accounts; 
-        private IDbSet<Transaction> transactions; 
- 
+        private IDbSet<Transaction> transactions;
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<User>()
+                        .HasMany(u => u.Transactions)
+                        .WithRequired(t => t.User)
+                        .HasForeignKey(t => t.UserId)
+                        .WillCascadeOnDelete(false);
+        }
         public DataContext() : base("DefaultConnection")
         {
         }
