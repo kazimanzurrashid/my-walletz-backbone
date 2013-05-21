@@ -268,6 +268,8 @@
     <Content Include="Scripts\backbone.min.js">
       <DependentUpon>backbone.js</DependentUpon>
     </Content>
+    <Content Include="Content\application.less" />
+    <Content Include="Content\datagrid.less" />
     <Content Include="Content\less\wells.less" />
     <Content Include="Content\less\variables.less" />
     <Content Include="Content\less\utilities.less" />
@@ -315,8 +317,6 @@
     <Content Include="Content\font\fontawesome-webfont.ttf" />
     <Content Include="Content\font\fontawesome-webfont.eot" />
     <Content Include="Content\font\FontAwesome.otf" />
-    <Content Include="Content\application.less" />
-    <Content Include="Content\datagrid.less" />
     <None Include="Scripts\jquery-1.9.1.intellisense.js">
       <DependentUpon>jquery-1.9.1.js</DependentUpon>
     </None>
