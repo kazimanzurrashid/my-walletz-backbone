@@ -26,14 +26,7 @@
         private IDbSet<Category> categories; 
         private IDbSet<Account> accounts; 
         private IDbSet<Transaction> transactions;
-        protected override void OnModelCreating(DbModelBuilder modelBuilder)
-        {
-            modelBuilder.Entity<User>()
-                        .HasMany(u => u.Transactions)
-                        .WithRequired(t => t.User)
-                        .HasForeignKey(t => t.UserId)
-                        .WillCascadeOnDelete(false);
-        }
+
         public DataContext() : base("DefaultConnection")
         {
         }
@@ -74,6 +67,39 @@
             where TEntity : class
         {
             return Set<TEntity>();
+        }
+
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<User>()
+                .HasMany(u => u.Accounts)
+                .WithRequired(a => a.User)
+                .HasForeignKey(a => a.UserId)
+                .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<User>()
+                .HasMany(u => u.Categories)
+                .WithRequired(c => c.User)
+                .HasForeignKey(c => c.UserId)
+                .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<User>()
+                .HasMany(u => u.Transactions)
+                .WithRequired(t => t.User)
+                .HasForeignKey(t => t.UserId)
+                .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<Account>()
+                .HasMany(a => a.Transactions)
+                .WithRequired(t => t.Account)
+                .HasForeignKey(t => t.AccountId)
+                .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<Category>()
+                .HasMany(c => c.Transactions)
+                .WithOptional(t => t.Category)
+                .HasForeignKey(t => t.CategoryId)
+                .WillCascadeOnDelete(false);
         }
     }
 }
