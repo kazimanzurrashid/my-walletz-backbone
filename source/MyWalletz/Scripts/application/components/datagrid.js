@@ -116,7 +116,6 @@
         },
 
         remove: function() {
-            this.unsubscribeCollectionEvents();
             this.removeRows();
             Backbone.View.prototype.remove.call(this, arguments);
             return this;

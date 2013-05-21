@@ -175,19 +175,11 @@ describe('Components.DataGrid', function() {
     });
 
     describe('#remove', function() {
-        var spiedUnsubscribeCollectionEvents;
         var spiedRemoveRows;
 
         beforeEach(function() {
-            spiedUnsubscribeCollectionEvents = sinon.spy(
-                dataGrid,
-                'unsubscribeCollectionEvents');
             spiedRemoveRows = sinon.spy(dataGrid, 'removeRows');
             dataGrid.remove();
-        });
-
-        it('unsubscribes collection events', function() {
-            expect(spiedUnsubscribeCollectionEvents).to.have.been.calledOnce;
         });
 
         it('removes existing rows', function() {
@@ -195,7 +187,6 @@ describe('Components.DataGrid', function() {
         });
 
         afterEach(function() {
-            spiedUnsubscribeCollectionEvents.restore();
             spiedRemoveRows.restore();
         });
     });

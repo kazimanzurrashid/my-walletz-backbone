@@ -18,7 +18,7 @@
                 return el.slideUp();
             };
             this.listenTo(this.model, 'change', this.render);
-            this.listenTo(this.model, 'destroy', this.remove);
+            this.listenTo(this.model, 'destroy remove', this.remove);
         },
         
         render: function() {
@@ -140,8 +140,8 @@
 
             var confirmOption = {
                 prompt: 'Are you sure you want to delete <strong>' +
-                    title +
-                    '</strong> category?',
+                        title +
+                        '</strong> category?',
                 ok: function() {
                     model.destroy({
                         success: function() {
@@ -201,18 +201,6 @@
         }
     });
 
-    function filterExpenses(collection) {
-        return collection.filter(function (model) {
-            return model.isExpense();
-        });
-    }
- 
-    function filterIncomes(collection) {
-        return collection.filter(function (model) {
-            return model.isIncome();
-        });
-    }
-
     Views.CategoryTabbedList = Backbone.View.extend({
         el: '#category-list-page',
 
@@ -222,17 +210,17 @@
             var expenses = new Models.Categories;
             var incomes = new Models.Categories;
 
-            expenses.reset(filterExpenses(this.collection));
-            incomes.reset(filterIncomes(this.collection));
+            expenses.reset(this.filterExpenses(this.collection));
+            incomes.reset(this.filterIncomes(this.collection));
 
             this.attachSync(expenses);
             this.attachSync(incomes);
 
             var self = this;
 
-            this.listenTo(this.collection, 'reset', function () {
-                expenses.reset(filterExpenses(self.collection));
-                incomes.reset(filterIncomes(self.collection));
+            this.listenTo(this.collection, 'reset', function() {
+                expenses.reset(self.filterExpenses(self.collection));
+                incomes.reset(self.filterIncomes(self.collection));
             });
 
             var template = _.template(
@@ -260,15 +248,27 @@
             return this;
         },
 
-        attachSync: function (collection) {
+        attachSync: function(collection) {
             var self = this;
 
-            this.listenTo(collection, 'add', function (model) {
-                self.collection.add(model, { silent: true });
+            this.listenTo(collection, 'add', function(model) {
+                self.collection.add(model);
             });
 
             this.listenTo(collection, 'remove destroy', function(model) {
-                self.collection.remove(model, { silent: true });
+                self.collection.remove(model);
+            });
+        },
+
+        filterExpenses: function(collection) {
+            return collection.filter(function(model) {
+                return model.isExpense();
+            });
+        },
+
+        filterIncomes: function(collection) {
+            return collection.filter(function(model) {
+                return model.isIncome();
             });
         }
     });

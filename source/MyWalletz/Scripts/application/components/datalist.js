@@ -56,7 +56,6 @@
         },
 
         remove: function() {
-            this.unsubscribeCollectionEvents();
             this.removeChildViews();
             Backbone.View.prototype.remove.call(this, arguments);
             return this;

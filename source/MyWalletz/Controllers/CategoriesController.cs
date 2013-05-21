@@ -38,7 +38,9 @@
                 return Request.CreateResponse(HttpStatusCode.NotFound);
             }
 
-            return Request.CreateResponse(HttpStatusCode.OK, category.AsModel());
+            return Request.CreateResponse(
+                HttpStatusCode.OK,
+                category.AsModel());
         }
 
         public HttpResponseMessage Post(CreateCategory model)

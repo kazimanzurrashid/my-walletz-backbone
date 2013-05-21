@@ -36,19 +36,18 @@ var Application;
                 Validation.addError(errors, 'title', 'Title is required.');
             }
 
-            if (!attributes.type) {
-                Validation.addError(errors, 'type', 'Type is required.');
-            } else {
+            if (attributes.type) {
                 if (!_.include(
                         _.values(Models.CategoryType), attributes.type)) {
                     Validation.addError(
                         errors,
                         'type',
-                        'Type must be either "' +
-                            Models.CategoryType.expense +
-                            '" or "' +
-                            Models.CategoryType.income + '".');
+                        'Type must be any of the following (' +
+                         _.values(Models.CategoryType).join(', ') +
+                         ') value.');
                 }
+            } else {
+                Validation.addError(errors, 'type', 'Type is required.');
             }
 
             return _.isEmpty(errors) ? void(0) : errors;
