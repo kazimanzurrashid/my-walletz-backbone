@@ -55,7 +55,7 @@
             var title = this.textbox.val();
             var oldTitle = this.model.get('title');
 
-            if (!title.length) {
+            if (!title) {
                 this.textbox.val(oldTitle);
                 return;
             }
@@ -135,6 +135,12 @@
             return this;
         },
 
+        remove: function () {
+            this.dataList.remove();
+            Backbone.View.prototype.remove.call(this, arguments);
+            return this;
+        },
+
         destroy: function(model) {
             var title = model.get('title');
 
@@ -179,7 +185,7 @@
             var textbox = $(e.currentTarget);
             var title = textbox.val();
 
-            if (!title.length) {
+            if (!title) {
                 return;
             }
 
