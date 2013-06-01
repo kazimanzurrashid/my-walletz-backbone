@@ -4,7 +4,7 @@
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
 
-    [Table("Categories")]
+    [Table("mw_Categories")]
     public class Category
     {
         private ICollection<Transaction> transactions;

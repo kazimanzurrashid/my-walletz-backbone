@@ -198,6 +198,10 @@
     <Compile Include="DataAccess\Migrations\201305181706550_TransactionMigration.Designer.cs">
       <DependentUpon>201305181706550_TransactionMigration.cs</DependentUpon>
     </Compile>
+    <Compile Include="DataAccess\Migrations\201306010007025_RenamedTablesMigration.cs" />
+    <Compile Include="DataAccess\Migrations\201306010007025_RenamedTablesMigration.Designer.cs">
+      <DependentUpon>201306010007025_RenamedTablesMigration.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\ChangePassword.cs" />
     <Compile Include="Models\CreateAccount.cs" />
     <Compile Include="Models\CreateCategory.cs" />
@@ -451,6 +455,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="DataAccess\Migrations\201305181706550_TransactionMigration.resx">
       <DependentUpon>201305181706550_TransactionMigration.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DataAccess\Migrations\201306010007025_RenamedTablesMigration.resx">
+      <DependentUpon>201306010007025_RenamedTablesMigration.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup />

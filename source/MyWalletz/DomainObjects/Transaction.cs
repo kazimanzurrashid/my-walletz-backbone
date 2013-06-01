@@ -4,7 +4,7 @@
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
 
-    [Table("Transactions")]
+    [Table("mw_Transactions")]
     public class Transaction
     {
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]

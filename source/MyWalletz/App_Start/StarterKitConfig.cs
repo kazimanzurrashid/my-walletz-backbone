@@ -115,7 +115,7 @@ namespace MyWalletz.Infrastructure
                     }
                 }
 
-                WebSecurity.InitializeDatabaseConnection("DefaultConnection", "Users", "Id", "Email", true);
+                WebSecurity.InitializeDatabaseConnection("DefaultConnection", "mw_Users", "Id", "Email", true);
             }
             catch (Exception e)
             {

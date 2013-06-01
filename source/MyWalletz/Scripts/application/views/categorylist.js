@@ -254,6 +254,13 @@
             return this;
         },
 
+        remove: function () {
+            this.expenseList.remove();
+            this.incomesList.remove();
+            Backbone.View.prototype.remove.call(this, arguments);
+            return this;
+        },
+
         attachSync: function(collection) {
             var self = this;
 
