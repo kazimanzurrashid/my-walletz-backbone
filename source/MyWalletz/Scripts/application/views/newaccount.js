@@ -60,7 +60,6 @@
                             return;
                         }
                     }
-
                     $.showErrorbar('An unexpected error has occurred while ' +
                         'creating new account.');
                 }

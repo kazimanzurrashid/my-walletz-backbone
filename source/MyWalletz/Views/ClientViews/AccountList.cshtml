@@ -25,12 +25,37 @@
     <td>{{formattedBalance()}}</td>
     <td>
       <div class="btn-group">
-        <a href="javascript:;" class="btn dropdown-toggle" data-toggle="dropdown">Action <span class="caret"></span></a>
+        <a
+          href="javascript:;"
+          class="btn dropdown-toggle"
+          data-toggle="dropdown">
+          Action <span class="caret"></span>
+        </a>
         <ul class="dropdown-menu" role="menu">
-          <li><a href="@Url.ClientUrl("accounts", "{{id}}", "edit")"><i class="icon-edit"></i> Edit</a></li>
-          <li><a href="javascript:;" data-command="delete"><i class="icon-trash"></i> Delete</a></li>
+          <li>
+            <a 
+              href="@Url.ClientUrl("accounts", "{{id}}", "edit")">
+              <i class="icon-edit"></i> Edit
+            </a>
+          </li>
+          <li>
+            <a
+              href="javascript:;"
+              data-command="delete">
+              <i class="icon-trash"></i> Delete
+            </a>
+          </li>
           <li class="divider"></li>
-          <li><a href="@Url.ClientUrl("accounts", "{{id}}", "transactions", "new")"><i class="icon-plus"></i> New transaction</a></li>
+          <li>
+            <a
+              href="@Url.ClientUrl(
+                "accounts",
+                "{{id}}",
+                "transactions",
+                "new")">
+              <i class="icon-plus"></i> New transaction
+            </a>
+          </li>
         </ul>
       </div>
     </td>

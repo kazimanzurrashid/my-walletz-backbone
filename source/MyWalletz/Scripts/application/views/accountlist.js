@@ -25,6 +25,11 @@
             return this;
         },
 
+        remove: function() {
+            this.dataGrid.remove();
+            Backbone.View.prototype.remove.call(this, arguments);
+        },
+
         destroy: function(model) {
             var title = model.get('title');
 

@@ -2,14 +2,6 @@ var Application;
 
 (function($, _, Backbone, Application) {
 
-    function setSorting(target, attribute, order) {
-        target.sortAttribute = attribute;
-        target.sortOrder = order === 'descending' ?
-            Application.Components.SortOrder.descending :
-            Application.Components.SortOrder.ascending;
-
-    }
-
     Application.Router = Backbone.Router.extend({
         routes: {
             '!/accounts/:id/transactions/new': 'newTransaction',
@@ -135,7 +127,7 @@ var Application;
                     return;
                 }
                 var transactions = self.context.getOrCreateTransactions(id);
-                setSorting(transactions, sortAttribute, sortOrder);
+                self.setSorting(transactions, sortAttribute, sortOrder);
                 transactions.pageIndex = page - 1;
                 transactions.fetch({
                     reset: true
@@ -172,7 +164,7 @@ var Application;
             var self = this;
 
             this.ensureSignedIn(function () {
-                setSorting(self.context.accounts, sortAttribute, sortOrder);
+                self.setSorting(self.context.accounts, sortAttribute, sortOrder);
                 self.context.accounts.sort();
                 self.activate(self.accountListView, 'accounts-menu');
             });
@@ -235,6 +227,13 @@ var Application;
             }
 
             action();
+        },
+
+        setSorting: function (target, attribute, order) {
+            target.sortAttribute = attribute;
+            target.sortOrder = order === 'descending' ?
+                Application.Components.SortOrder.descending :
+                Application.Components.SortOrder.ascending;
         }
     });
 
