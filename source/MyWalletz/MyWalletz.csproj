@@ -330,9 +330,13 @@
     <Content Include="Scripts\bootstrap.min.js">
       <DependentUpon>bootstrap.js</DependentUpon>
     </Content>
-    <None Include="Scripts\jquery-2.0.2.intellisense.js" />
+    <None Include="Scripts\jquery-2.0.2.intellisense.js">
+      <DependentUpon>jquery-2.0.2.js</DependentUpon>
+    </None>
     <Content Include="Scripts\jquery-2.0.2.js" />
-    <Content Include="Scripts\jquery-2.0.2.min.js" />
+    <Content Include="Scripts\jquery-2.0.2.min.js">
+      <DependentUpon>jquery-2.0.2.js</DependentUpon>
+    </Content>
     <Content Include="Scripts\json2.js" />
     <Content Include="Scripts\json2.min.js">
       <DependentUpon>json2.js</DependentUpon>
@@ -430,7 +434,9 @@
     <Content Include="Views\ClientViews\_ForgotPassword.cshtml" />
     <Content Include="Views\ClientViews\_ChangePassword.cshtml" />
     <Content Include="Views\_ViewStart.cshtml" />
-    <Content Include="Scripts\jquery-2.0.2.min.map" />
+    <Content Include="Scripts\jquery-2.0.2.min.map">
+      <DependentUpon>jquery-2.0.2.js</DependentUpon>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config">
