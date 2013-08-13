@@ -1,8 +1,13 @@
-﻿var Application;
+﻿/* jshint browser: true, curly: true, eqeqeq: true, forin: true, latedef: true,
+    newcap: true, noarg: true, noempty: true, nonew: true, strict:true,
+    undef: true, unused: true */
+/* global _: false, jQuery: false, Backbone: false */
 
-(function ($, _, Backbone, Application) {
-    var Components = Application.Components || (Application.Components = {});
-    
+(function ($, _, Backbone, App) {
+    'use strict';
+
+    var Components = App.Components || (App.Components = {});
+
     Components.Pageable = _.extend({}, {
         parse: function (resp) {
             this.setCounts(resp[this.countAttribute]);
@@ -10,18 +15,21 @@
         },
 
         fetch: function (options) {
-            options || (options = {});
-
             var query = {
                 top: this.pageSize
-            };
+            },
+            orderBy;
 
+            if (!options) {
+                options = {};
+            }
+            
             if (this.pageIndex) {
                 query.skip = this.pageSize * this.pageIndex;
             }
 
             if (this.sortAttribute) {
-                var orderBy = this.sortAttribute;
+                orderBy = this.sortAttribute;
 
                 if (this.sortOrder === Components.SortOrder.ascending) {
                     orderBy += ' asc';
@@ -55,4 +63,4 @@
         }
     }, Components.Sortable);
 
-})(jQuery, _, Backbone, Application || (Application = {}));
+})(jQuery, _, Backbone, window.App || (window.App = {}));

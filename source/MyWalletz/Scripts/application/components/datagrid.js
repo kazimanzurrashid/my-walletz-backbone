@@ -1,7 +1,12 @@
-﻿var Application;
+﻿/* jshint browser: true, curly: true, eqeqeq: true, forin: true, latedef: true,
+    newcap: true, noarg: true, noempty: true, nonew: true, strict:true,
+    undef: true, unused: true */
+/* global _: false, jQuery: false, Backbone: false */
 
-(function ($, _, Backbone, Application) {
-    var Components = Application.Components || (Application.Components = {});
+(function ($, _, Backbone, App) {
+    'use strict';
+
+    var Components = App.Components || (App.Components = {});
 
     Components.DataGridRow = Backbone.View.extend({
         tagName: 'tr',
@@ -18,17 +23,20 @@
                 dataModel: this.model,
                 viewModel: null,
                 el: this.$el
-            };
+            },
+            model;
 
             this.trigger('render', args);
-            var model = args.viewModel || args.dataModel.toJSON();
+            model = args.viewModel || args.dataModel.toJSON();
             this.$el.html(this.template(model));
 
             return this;
         },
 
-        remove: function(notify) {
-            if (typeof notify === 'undefined') {
+        remove: function (notify) {
+            var self = this;
+
+            if (_.isUndefined(notify)) {
                 notify = true;
             }
 
@@ -43,8 +51,6 @@
                 Backbone.View.prototype.remove.call(this);
                 return this;
             }
-
-            var self = this;
 
             this.destroyAnimation(this.$el)
                 .promise()
@@ -63,8 +69,11 @@
         },
 
         initialize: function(options) {
+            var template;
+
             if (_.isString(options.rowTemplate)) {
-                var template = $(options.rowTemplate);
+                template = $(options.rowTemplate);
+
                 if (template.length) {
                     this.rowTemplate = _.template(template.html());
                 } else {
@@ -92,10 +101,10 @@
         },
 
         render: function() {
+            var self = this;
+
             this.configureSort();
             this.removeRows();
-
-            var self = this;
 
             this.collection
                 .each(function(model) {
@@ -138,24 +147,26 @@
         },
 
         configureSort: function() {
+            var sortable = this.collection,
+                sortAttribute,
+                icon;
+
             this.columnHeaders
                 .removeClass('data-grid-sorted')
                 .find('i').remove();
-
-            var sortable = this.collection;
 
             if (!sortable.sortAttribute) {
                 return;
             }
 
-            var sortAttribute = sortable.sortAttribute.toLowerCase();
-            var icon = sortable.sortOrder === Components.SortOrder.descending ?
+            sortAttribute = sortable.sortAttribute.toLowerCase();
+            icon = sortable.sortOrder === Components.SortOrder.descending ?
                 'icon-chevron-down' :
                 'icon-chevron-up';
 
             this.columnHeaders.each(function(index, element) {
-                var column = $(element);
-                var columnName = column.attr('data-attribute') || '';
+                var column = $(element),
+                    columnName = column.attr('data-attribute') || '';
 
                 if (sortAttribute === columnName.toLowerCase()) {
                     column.addClass('data-grid-sorted')
@@ -165,17 +176,16 @@
         },
 
         renderRow: function(model, insertInDom) {
-            if (typeof insertInDom === 'undefined') {
-                insertInDom = true;
-            }
-
             var row = new Components.DataGridRow({
                 model: model,
                 template: this.rowTemplate,
                 destroyAnimation: this.destroyAnimation
-            });
+            }),
+            self = this;
 
-            var self = this;
+            if (_.isUndefined(insertInDom)) {
+                insertInDom = true;
+            }
 
             this.listenTo(row, 'render', function(e) {
                 return self.trigger('rowRender', e);
@@ -222,21 +232,22 @@
         },
 
         handleSort: function(e) {
-            var sortable = this.collection;
-            var existingSortAttribute = sortable.sortAttribute || '';
-            var newSortAttribute = $(e.currentTarget).attr('data-attribute') || '';
-            var order = Components.SortOrder.ascending;
+            var sortable = this.collection,
+                existingSortAttribute = sortable.sortAttribute || '',
+                newSortAttribute = $(e.currentTarget).attr('data-attribute') || '',
+                order = Components.SortOrder.ascending,
+                args;
 
             if (!existingSortAttribute && !newSortAttribute) {
                 return;
             }
 
             if ((existingSortAttribute.toLowerCase() === newSortAttribute.toLowerCase()) &&
-                (sortable.sortOrder == Components.SortOrder.ascending)) {
+                (sortable.sortOrder === Components.SortOrder.ascending)) {
                 order = Components.SortOrder.descending;
             }
 
-            var args = _.extend(e, {
+            args = _.extend(e, {
                 attribute: newSortAttribute,
                 order: order
             });
@@ -245,15 +256,15 @@
         },
 
         handleCommand: function (e) {
-            var element = $(e.currentTarget);
-            var command = element.attr('data-command');
-            var cid = element.closest('[data-cid]').attr('data-cid');
-            var model = this.collection.get(cid);
-            var args = _.extend(e, {
-                command: command,
-                model: model
-            });
+            var element = $(e.currentTarget),
+                command = element.attr('data-command'),
+                cid = element.closest('[data-cid]').attr('data-cid'),
+                model = this.collection.get(cid),
+                args = _.extend(e, {
+                    command: command,
+                    model: model
+                });
             this.trigger('command', args);
         }
     });
-})(jQuery, _, Backbone, Application || (Application = {}));
+})(jQuery, _, Backbone, window.App || (window.App = {}));

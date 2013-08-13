@@ -1,7 +1,12 @@
-﻿var Application;
+﻿/* jshint browser: true, curly: true, eqeqeq: true, forin: true, latedef: true,
+    newcap: true, noarg: true, noempty: true, nonew: true, strict:true,
+    undef: true, unused: true */
+/* global jQuery: false, _: false, Backbone: false */
 
-(function ($, _, Backbone, Application) {
-    var Views = Application.Views || (Application.Views = {});
+(function ($, _, Backbone, App) {
+    'use strict';
+
+    var Views = App.Views || (App.Views = {});
 
     Views.EditAccount = Backbone.View.extend({
         el: '#edit-account-page',
@@ -23,7 +28,7 @@
             this.form.deserializeFields(this.model.attributes);
             this.currencyDisplay.text(this.model.get('currency'));
             this.balanceDisplay.text(
-                Views.Helpers.formatMoney(this.model.get('balance')));
+                Views.helpers.formatMoney(this.model.get('balance')));
 
             return this;
         },
@@ -39,23 +44,24 @@
         },
 
         onSave: function(e) {
+            var self = this;
+
             e.preventDefault();
             this.form.hideFieldErrors();
 
-            Views.Helpers.subscribeModelInvalidEvent(this.model, this.form);
-
-            var self = this;
+            Views.helpers.subscribeModelInvalidEvent(this.model, this.form);
 
             this.model.save(this.form.serializeFields(), {
                 success: function() {
-                    self.router.navigate(Application.clientUrl('/accounts'), true);
+                    self.router.navigate(App.clientUrl('/accounts'), true);
                     $.showSuccessbar('<strong>' +
                         self.model.get('title') +
                         '</strong> account updated.');
                 },
                 error: function(model, jqxhr) {
-                    if (Views.Helpers.hasModelErrors(jqxhr)) {
-                        var modelErrors = Views.Helpers.getModelErrors(jqxhr);
+                    var modelErrors;
+                    if (Views.helpers.hasModelErrors(jqxhr)) {
+                        modelErrors = Views.helpers.getModelErrors(jqxhr);
                         if (modelErrors) {
                             self.form.showFieldErrors({
                                 errors: modelErrors
@@ -74,4 +80,4 @@
 
     _.extend(Views.EditAccount.prototype, Views.Activable);
 
-})(jQuery, _, Backbone, Application || (Application = {}));
+})(jQuery, _, Backbone, window.App || (window.App = {}));

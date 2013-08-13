@@ -6,7 +6,7 @@ describe('Views.Navigation', function() {
     before(function() {
         fixtures.load('/navigation.html');
 
-        view = new Application.Views.Navigation({
+        view = new App.Views.Navigation({
             el: $(fixtures.window().document.body).find('#navigation')
         });
     });
@@ -36,7 +36,7 @@ describe('Views.Navigation', function() {
         var stubbedTrigger;
 
         beforeEach(function() {
-            return stubbedTrigger = sinon.stub(Application.events, 'trigger');
+            return stubbedTrigger = sinon.stub(App.events, 'trigger');
         });
 
         describe('menu item clicks', function() {

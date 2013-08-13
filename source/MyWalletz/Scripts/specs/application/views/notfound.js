@@ -4,7 +4,7 @@ describe('Views.NotFound', function() {
     var view;
 
     before(function() {
-        return view = new Application.Views.NotFound();
+        return view = new App.Views.NotFound();
     });
 
     it('can activate', function() {

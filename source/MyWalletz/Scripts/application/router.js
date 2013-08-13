@@ -1,8 +1,12 @@
-var Application;
+/* jshint browser: true, curly: true, eqeqeq: true, forin: true, latedef: true,
+    newcap: true, noarg: true, noempty: true, nonew: true, strict:true,
+    undef: true, unused: true */
+/* global _: false, jQuery: false, Backbone: false */
 
-(function($, _, Backbone, Application) {
-
-    Application.Router = Backbone.Router.extend({
+(function($, _, Backbone, App) {
+    'use strict';
+    
+    App.Router = Backbone.Router.extend({
         routes: {
             '!/accounts/:id/transactions/new': 'newTransaction',
             '!/accounts/:id/transactions/:page/:sortAttribute/:sortOrder': 'transactionList',
@@ -23,41 +27,41 @@ var Application;
         initialize: function (options) {
             this.context = options.context;
 
-            this.navigationView = new Application.Views.Navigation({
+            this.navigationView = new App.Views.Navigation({
                 collection: this.context.accounts
             }).render();
 
-            this.newTransactionView = new Application.Views.NewTransaction({
+            this.newTransactionView = new App.Views.NewTransaction({
                 categories: this.context.categories,
                 router: this
             });
 
-            this.transactionListView = new Application.Views.TransactionList({
+            this.transactionListView = new App.Views.TransactionList({
                 categories: this.context.categories,
                 router: this
             });
             
-            this.editAccountView = new Application.Views.EditAccount({
+            this.editAccountView = new App.Views.EditAccount({
                 router: this
             });
 
-            this.newAccountView = new Application.Views.NewAccount({
+            this.newAccountView = new App.Views.NewAccount({
                 collection: this.context.accounts,
                 router: this
             });
 
-            this.accountListView = new Application.Views.AccountList({
+            this.accountListView = new App.Views.AccountList({
                 collection: this.context.accounts,
                 router: this
             }).render();
 
-            this.categoryListView = new Application.Views.CategoryTabbedList({
+            this.categoryListView = new App.Views.CategoryTabbedList({
                 collection: this.context.categories
             }).render();
 
-            var pageTemplate = _.template($('#page-template').html());
+            var pageTemplate = _($('#page-template').html()).template();
 
-            this.homeView = new Application.Views.Page({
+            this.homeView = new App.Views.Page({
                 className: 'page',
                 template: pageTemplate,
                 model: new Backbone.Model({
@@ -82,7 +86,7 @@ var Application;
                 })
             });
 
-            this.aboutView = new Application.Views.Page({
+            this.aboutView = new App.Views.Page({
                 className: 'page',
                 template: pageTemplate,
                 model: new Backbone.Model({
@@ -95,86 +99,96 @@ var Application;
                 this.homeView.render().$el,
                 this.aboutView.render().$el);
 
-            this.notFoundView = new Application.Views.NotFound();
+            this.notFoundView = new App.Views.NotFound();
         },
 
         newTransaction: function(id) {
-            var self = this;
+            this.ensureSignedIn(_(function () {
+                var account = this.context.getAccount(id),
+                    transactions;
 
-            this.ensureSignedIn(function () {
-                var account = self.context.getAccount(id);
                 if (!account) {
-                    self.notFound();
+                    this.notFound();
                     return;
                 }
-                var transactions = self.context.getOrCreateTransactions(id);
-                self.newTransactionView.load(account, transactions);
-                self.activate(self.newTransactionView, 'transactions-menu');
-            });
+
+                transactions = this.context.getOrCreateTransactions(id);
+                this.newTransactionView.load(account, transactions);
+                this.activate(this.newTransactionView, 'transactions-menu');
+            }).bind(this));
         },
 
         transactionList: function(id, page, sortAttribute, sortOrder) {
-            page || (page = 1);
-            sortAttribute || (sortAttribute = 'postedAt');
-            sortOrder || (sortOrder = 'descending');
+            if (_(page).isUndefined()) {
+                page = 1;
+            }
 
-            var self = this;
+            if (_(sortAttribute).isUndefined()) {
+                sortAttribute = 'postedAt';
+            }
 
-            this.ensureSignedIn(function () {
-                var account = self.context.getAccount(id);
+            if (_(sortOrder).isUndefined()) {
+                sortOrder = 'descending';
+            }
+
+            this.ensureSignedIn(_(function () {
+                var account = this.context.getAccount(id),
+                    transactions;
+                
                 if (!account) {
-                    self.notFound();
+                    this.notFound();
                     return;
                 }
-                var transactions = self.context.getOrCreateTransactions(id);
-                self.setSorting(transactions, sortAttribute, sortOrder);
+
+                transactions = this.context.getOrCreateTransactions(id);
+                this.setSorting(transactions, sortAttribute, sortOrder);
                 transactions.pageIndex = page - 1;
                 transactions.fetch({
                     reset: true
                 });
-                self.transactionListView.load(account, transactions).render();
-                self.activate(self.transactionListView, 'transactions-menu');
-            });
+                this.transactionListView.load(account, transactions).render();
+                this.activate(this.transactionListView, 'transactions-menu');
+            }).bind(this));
         },
 
         editAccount: function(id) {
-            var self = this;
-            this.ensureSignedIn(function() {
-                var account = self.context.getAccount(id);
+            this.ensureSignedIn(_(function() {
+                var account = this.context.getAccount(id);
                 if (!account) {
-                    self.notFound();
+                    this.notFound();
                     return;
                 }
-                self.editAccountView.load(account);
-                self.activate(self.editAccountView, 'accounts-menu');
-            });
+                this.editAccountView.load(account);
+                this.activate(this.editAccountView, 'accounts-menu');
+            }).bind(this));
         },
 
         newAccount: function() {
-            var self = this;
-            this.ensureSignedIn(function() {
-                return self.activate(self.newAccountView, 'accounts-menu');
-            });
+            this.ensureSignedIn(_(function() {
+                return this.activate(this.newAccountView, 'accounts-menu');
+            }).bind(this));
         },
 
         accountList: function(sortAttribute, sortOrder) {
-            sortAttribute || (sortAttribute = 'title');
-            sortOrder || (sortOrder = 'ascending');
+            if (_.isUndefined(sortAttribute)) {
+                sortAttribute = 'postedAt';
+            }
 
-            var self = this;
+            if (_.isUndefined(sortOrder)) {
+                sortOrder = 'descending';
+            }
 
-            this.ensureSignedIn(function () {
-                self.setSorting(self.context.accounts, sortAttribute, sortOrder);
-                self.context.accounts.sort();
-                self.activate(self.accountListView, 'accounts-menu');
-            });
+            this.ensureSignedIn(_(function () {
+                this.setSorting(this.context.accounts, sortAttribute, sortOrder);
+                this.context.accounts.sort();
+                this.activate(this.accountListView, 'accounts-menu');
+            }).bind(this));
         },
 
         categoryList: function() {
-            var self = this;
-            this.ensureSignedIn(function () {
-                self.activate(self.categoryListView, 'categories-menu');
-            });
+            this.ensureSignedIn(_(function () {
+                this.activate(this.categoryListView, 'categories-menu');
+            }).bind(this));
         },
 
         about: function () {
@@ -196,32 +210,30 @@ var Application;
                 }
                 this.currentView.deactivate();
             }
-            
-            if (menu) {
-                this.navigationView.select(menu);
-            } else {
+
+            if (_.isUndefined(menu)) {
                 this.navigationView.deselectAll();
+            } else {
+                this.navigationView.select(menu);
             }
-            
+
             this.currentView = view;
             this.currentView.activate();
         },
-        
-        ensureSignedIn: function(action) {
-            var self = this;
 
+        ensureSignedIn: function(action) {
             if (!this.context.isUserSignedIn()) {
-                Application.events.trigger('showMembership', {
-                    ok: function() {
-                        if (self.context.isUserSignedIn()) {
+                App.events.trigger('showMembership', {
+                    ok: _.bind(function() {
+                        if (this.context.isUserSignedIn()) {
                             action();
                             return;
                         }
-                        self.navigate(Application.clientUrl('/'), true);
-                    },
-                    cancel: function () {
-                        self.navigate(Application.clientUrl('/'), true);
-                    }
+                        this.navigate(App.clientUrl('/'), true);
+                    }, this),
+                    cancel: _.bind(function () {
+                        this.navigate(App.clientUrl('/'), true);
+                    }, this)
                 });
                 return;
             }
@@ -232,9 +244,9 @@ var Application;
         setSorting: function (target, attribute, order) {
             target.sortAttribute = attribute;
             target.sortOrder = order === 'descending' ?
-                Application.Components.SortOrder.descending :
-                Application.Components.SortOrder.ascending;
+                App.Components.SortOrder.descending :
+                App.Components.SortOrder.ascending;
         }
     });
 
-})(jQuery, _, Backbone, Application || (Application = {}));
+})(jQuery, _, Backbone, window.App || (window.App = {}));

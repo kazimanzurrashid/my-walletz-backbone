@@ -4,7 +4,7 @@ describe('Models.Category', function() {
     var category;
 
     beforeEach(function() {
-        category = new Application.Models.Category();
+        category = new App.Models.Category();
     });
 
     describe('#defaults', function() {
@@ -21,7 +21,7 @@ describe('Models.Category', function() {
         describe('expense', function() {
             beforeEach(function() {
                 category.set({
-                    type: Application.Models.CategoryType.expense
+                    type: App.Models.CategoryType.expense
                 });
             });
 
@@ -41,7 +41,7 @@ describe('Models.Category', function() {
         describe('income', function() {
             beforeEach(function() {
                 category.set({
-                    type: Application.Models.CategoryType.income
+                    type: App.Models.CategoryType.income
                 });
             });
 
@@ -63,7 +63,7 @@ describe('Models.Category', function() {
             beforeEach(function() {
                 category.set({
                     title: 'automobiles',
-                    type: Application.Models.CategoryType.expense
+                    type: App.Models.CategoryType.expense
                 });
             });
 
@@ -79,7 +79,7 @@ describe('Models.Category', function() {
                 describe('missing', function() {
                     beforeEach(function() {
                         category.set({
-                            type: Application.Models.CategoryType.expense
+                            type: App.Models.CategoryType.expense
                         });
                     });
 
@@ -94,7 +94,7 @@ describe('Models.Category', function() {
                     beforeEach(function() {
                         category.set({
                             title: '',
-                            type: Application.Models.CategoryType.expense
+                            type: App.Models.CategoryType.expense
                         });
                     });
 
@@ -160,11 +160,11 @@ describe('Models.Categories', function() {
     var categories;
 
     beforeEach(function() {
-        categories = new Application.Models.Categories();
+        categories = new App.Models.Categories();
     });
 
     it('has Category as #model', function() {
-        expect(categories.model).to.deep.equal(Application.Models.Category);
+        expect(categories.model).to.deep.equal(App.Models.Category);
     });
 
     it('has #url', function() {

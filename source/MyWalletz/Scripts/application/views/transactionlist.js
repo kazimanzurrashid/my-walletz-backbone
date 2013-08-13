@@ -1,11 +1,16 @@
-﻿var Application;
+﻿/* jshint browser: true, curly: true, eqeqeq: true, forin: true, latedef: true,
+    newcap: true, noarg: true, noempty: true, nonew: true, strict:true,
+    undef: true, unused: true */
+/* global jQuery: false, _: false, Backbone: false */
 
-(function ($, _, Backbone, Application) {
-    var Views = Application.Views || (Application.Views = {});
+(function ($, _, Backbone, App) {
+    'use strict';
+
+    var Views = App.Views || (App.Views = {});
 
     Views.TransactionList = Backbone.View.extend({
         el: '#transaction-list-page',
-        
+
         initialize: function (options) {
             this.router = options.router;
             this.categories = options.categories;
@@ -14,14 +19,14 @@
             this.balanceDisplay = this.$('#transaction-list-balance');
             this.newTransactionLink = this.$('.form-actions > .btn');
 
-            this.dataGrid = new Application.Components.DataGrid({
+            this.dataGrid = new App.Components.DataGrid({
                 el: this.$('.data-grid'),
                 rowTemplate: _.template(this.$('#transaction-grid-row-template').html())
             });
             this.listenTo(this.dataGrid, 'sort', this.onSort);
             this.listenTo(this.dataGrid, 'rowRender', this.onRowRender);
             
-            this.dataPager = new Application.Components.DataPager({
+            this.dataPager = new App.Components.DataPager({
                 el: this.$('.pagination'),
                 showFirstAndLast: true
             });
@@ -54,14 +59,14 @@
         },
 
         renderBalance: function() {
-            var balance = Views.Helpers.formatMoney(
+            var balance = Views.helpers.formatMoney(
                 this.account.get('balance'),
                 this.account.get('currency'));
             this.balanceDisplay.text(balance);
         },
 
         renderNewTransactionLink: function() {
-            var newLink = Application.clientUrl(
+            var newLink = App.clientUrl(
                 '/accounts',
                 this.account.id,
                 'transactions',
@@ -76,12 +81,14 @@
         },
 
         onSort: function(e){
-            e.preventDefault();
-            var order = e.order === Application.Components.SortOrder.descending ?
+            var order = e.order === App.Components.SortOrder.descending ?
                 'descending' :
                 'ascending';
+
+            e.preventDefault();
+
             this.router.navigate(
-                Application.clientUrl(
+                App.clientUrl(
                     '/accounts',
                     this.account.id,
                     'transactions',
@@ -92,34 +99,38 @@
         },
 
         onRowRender: function(e) {
-            var model = e.dataModel.toJSON();
-            var category = (e.dataModel).getCategory(this.categories);
-            var categoryTitle = '';
+            var model = e.dataModel.toJSON(),
+                category = (e.dataModel).getCategory(this.categories),
+                categoryTitle = '';
+
             if (category) {
                 categoryTitle = category.get('type') + ' » ' + category.get('title');
                 if (category.isExpense()) {
                     model.amount = -model.amount;
                 }
             }
+
             model.categoryTitle = categoryTitle;
+
             e.viewModel = _.extend(model, {
                 formattedPostedAt: function () {
-                    return Views.Helpers.formatDate(this.postedAt);
+                    return Views.helpers.formatDate(this.postedAt);
                 },
                 formattedAmount: function () {
-                    return Views.Helpers.formatMoney(this.amount);
+                    return Views.helpers.formatMoney(this.amount);
                 }
             });
         },
 
         onPageChanged: function(e) {
-            var pageable = this.collection;
-            var attribute = pageable.sortAttribute;
-            var order = pageable.sortOrder === Application.Components.SortOrder.descending ?
+            var pageable = this.collection,
+                attribute = pageable.sortAttribute,
+                order = pageable.sortOrder === App.Components.SortOrder.descending ?
                 'descending' :
                 'ascending';
+
             this.router.navigate(
-                Application.clientUrl(
+                App.clientUrl(
                     '/accounts',
                     this.account.id,
                     'transactions',
@@ -132,4 +143,4 @@
 
     _.extend(Views.TransactionList.prototype, Views.Activable);
 
-})(jQuery, _, Backbone, Application || (Application = {}));
+})(jQuery, _, Backbone, window.App || (window.App = {}));

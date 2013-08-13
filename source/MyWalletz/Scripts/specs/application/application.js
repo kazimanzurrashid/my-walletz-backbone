@@ -10,7 +10,7 @@ describe('Application', function() {
         var stubbedRouter;
 
         before(function() {
-            stubbedContext = sinon.stub(Application, 'Context', function() {
+            stubbedContext = sinon.stub(App, 'Context', function() {
                 return {
                     isUserSignedIn: function () { },
                     userSignedIn: function () { },
@@ -19,22 +19,22 @@ describe('Application', function() {
             });
 
             stubbedMembershipView = sinon.stub(
-                Application.Views,
+                App.Views,
                 'Membership',
                 function() {
                     return {};
                 });
 
             stubbedProfileView = sinon.stub(
-                Application.Views,
+                App.Views,
                 'Profile',
                 function() {
                     return {};
                 });
 
-            spiedEventsTrigger = sinon.spy(Application.events, 'on');
+            spiedEventsTrigger = sinon.spy(App.events, 'on');
 
-            stubbedRouter = sinon.stub(Application, 'Router', function() {
+            stubbedRouter = sinon.stub(App, 'Router', function() {
                 return {
                     navigate: function() {
                     }
@@ -42,18 +42,18 @@ describe('Application', function() {
             });
 
             try {
-                Application.start();
+                App.start();
             } catch(e) {
             }
         });
 
         describe('view creation', function() {
             it('creates membership view', function() {
-                expect(Application.membershipView).to.exist;
+                expect(App.membershipView).to.exist;
             });
 
             it('creates profile view', function() {
-                expect(Application.profileView).to.exist;
+                expect(App.profileView).to.exist;
             });
         });
 
@@ -107,7 +107,7 @@ describe('Application', function() {
 
                     before(function() {
                         spiedEventsTrigger = sinon.spy(
-                            Application.events,
+                            App.events,
                             'trigger');
                     });
 
@@ -116,12 +116,12 @@ describe('Application', function() {
                         
                         before(function() {
                             stubbedIsUserSignedIn = sinon.stub(
-                                Application.context,
+                                App.context,
                                 'isUserSignedIn',
                                 function() {
                                     return true;
                                 });
-                            Application.events.trigger('myAccount');
+                            App.events.trigger('myAccount');
                         });
 
                         it('triggers showProfile', function() {
@@ -139,12 +139,12 @@ describe('Application', function() {
 
                         before(function() {
                             stubbedIsUserSignedIn = sinon.stub(
-                                Application.context,
+                                App.context,
                                 'isUserSignedIn',
                                 function() {
                                     return false;
                                 });
-                            Application.events.trigger('myAccount');
+                            App.events.trigger('myAccount');
                         });
 
                         it('triggers showMembership', function() {
@@ -168,10 +168,10 @@ describe('Application', function() {
                     
                     before(function () {
                         spiedContextUserSignedIn = sinon.spy(
-                            Application.context,
+                            App.context,
                             'userSignedIn');
-                        Application.userSignnedIn = false;
-                        Application.events.trigger('signedIn');
+                        App.userSignnedIn = false;
+                        App.events.trigger('signedIn');
                         stubbedDelay.callArg(0);
                     });
 
@@ -193,7 +193,7 @@ describe('Application', function() {
 
                 describe('passwordResetRequested', function() {
                     before(function() {
-                        Application.events.trigger('passwordResetRequested');
+                        App.events.trigger('passwordResetRequested');
                         stubbedDelay.callArg(0);
                     });
 
@@ -208,7 +208,7 @@ describe('Application', function() {
 
                 describe('signedUp', function() {
                     before(function() {
-                        Application.events.trigger('signedUp');
+                        App.events.trigger('signedUp');
                         stubbedDelay.callArg(0);
                     });
 
@@ -223,7 +223,7 @@ describe('Application', function() {
 
                 describe('passwordChanged', function() {
                     before(function() {
-                        Application.events.trigger('passwordChanged');
+                        App.events.trigger('passwordChanged');
                         stubbedDelay.callArg(0);
                     });
 
@@ -241,9 +241,9 @@ describe('Application', function() {
 
                     before(function() {
                         spiedContextUserSignedOut = sinon.spy(
-                            Application.context,
+                            App.context,
                             'userSignedOut');
-                        Application.events.trigger('signedOut');
+                        App.events.trigger('signedOut');
                         stubbedDelay.callArg(0);
                     });
 
@@ -270,11 +270,11 @@ describe('Application', function() {
         });
 
         it('creates router', function() {
-            expect(Application.router).to.exist;
+            expect(App.router).to.exist;
         });
 
         it('creates context', function() {
-            expect(Application.context).to.exist;
+            expect(App.context).to.exist;
         });
 
         after(function() {

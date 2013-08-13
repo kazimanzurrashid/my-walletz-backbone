@@ -1,7 +1,12 @@
-﻿var Application;
+﻿/* jshint browser: true, curly: true, eqeqeq: true, forin: true, latedef: true,
+    newcap: true, noarg: true, noempty: true, nonew: true, strict:true,
+    undef: true, unused: true */
+/* global jQuery: false, _: false, Backbone: false */
 
-(function ($, _, Backbone, Application) {
-    var Views = Application.Views || (Application.Views = {});
+(function ($, _, Backbone, App) {
+    'use strict';
+
+    var Views = App.Views || (App.Views = {});
 
     Views.AccountList = Backbone.View.extend({
         el: '#account-list-page',
@@ -9,7 +14,7 @@
         initialize: function (options) {
             this.router = options.router;
 
-            this.dataGrid = new Application.Components.DataGrid({
+            this.dataGrid = new App.Components.DataGrid({
                 el: this.$('.data-grid'),
                 collection: this.collection,
                 rowTemplate: _.template(this.$('#account-grid-row-template').html())
@@ -58,11 +63,11 @@
 
         onSort: function(e) {
             e.preventDefault();
-            var order = e.order === Application.Components.SortOrder.descending ?
+            var order = e.order === App.Components.SortOrder.descending ?
                 'descending' :
                 'ascending';
             this.router.navigate(
-                Application.clientUrl('/accounts', e.attribute, order),
+                App.clientUrl('/accounts', e.attribute, order),
                 true);
         },
 
@@ -73,11 +78,11 @@
             e.preventDefault();
             this.destroy(e.model);
         },
-        
+
         onRowRender: function(e) {
             e.viewModel = _.extend(e.dataModel.toJSON(), {
                 formattedBalance: function() {
-                    return Views.Helpers.formatMoney(
+                    return Views.helpers.formatMoney(
                         this.balance,
                         this.currency);
                 }
@@ -87,4 +92,4 @@
 
     _.extend(Views.AccountList.prototype, Views.Activable);
 
-})(jQuery, _, Backbone, Application || (Application = {}));
+})(jQuery, _, Backbone, window.App || (window.App = {}));

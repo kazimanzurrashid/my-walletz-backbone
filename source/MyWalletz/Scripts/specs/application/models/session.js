@@ -4,7 +4,7 @@ describe('Models.Session', function() {
     var session;
 
     beforeEach(function() {
-        session = new Application.Models.Session();
+        session = new App.Models.Session();
     });
 
     describe('#defaults', function() {

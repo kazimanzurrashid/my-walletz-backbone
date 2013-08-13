@@ -1,7 +1,12 @@
-var Application;
+/* jshint browser: true, curly: true, eqeqeq: true, forin: true, latedef: true,
+    newcap: true, noarg: true, noempty: true, nonew: true, strict:true,
+    undef: true, unused: true */
+/* global jQuery: false, Backbone: false */
 
-(function($, Backbone, Application) {
-    var Views = Application.Views || (Application.Views = {});
+(function($, Backbone, App) {
+    'use strict';
+
+    var Views = App.Views || (App.Views = {});
 
     Views.AccountMenuItem = Backbone.View.extend({
         tagName: 'li',
@@ -13,13 +18,13 @@ var Application;
 
         render: function() {
             var html = '<a href="' +
-                Application.clientUrl(
+                App.clientUrl(
                     '/accounts',
                     this.model.id,
                     'transactions') +
                 '">' +
-                this.model.get('title') + '</a>';
 
+            this.model.get('title') + '</a>';
             this.$el.html(html);
 
             return this;
@@ -40,7 +45,7 @@ var Application;
         },
 
         initialize: function() {
-            this.dataList = new Application.Components.DataList({
+            this.dataList = new App.Components.DataList({
                 el: this.$('.transactions-menu > .dropdown-menu'),
                 childViewFactory: function(model) {
                     return new Views.AccountMenuItem({
@@ -68,9 +73,9 @@ var Application;
             var command = $(e.currentTarget).attr('data-command');
 
             if (command) {
-                Application.events.trigger(command);
+                App.events.trigger(command);
             }
         }
     });
 
-})(jQuery, Backbone, Application || (Application = {}));
+})(jQuery, Backbone, window.App || (window.App = {}));

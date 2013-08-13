@@ -1,7 +1,12 @@
-var Application;
+/* jshint browser: true, curly: true, eqeqeq: true, forin: true, latedef: true,
+    newcap: true, noarg: true, noempty: true, nonew: true, strict:true,
+    undef: true, unused: true */
+/* global jQuery: false, _: false, Backbone: false */
 
-(function ($, Backbone, Application) {
-    var Views = Application.Views || (Application.Views = {});
+(function ($, _, Backbone, App) {
+    'use strict';
+
+    var Views = App.Views || (App.Views = {});
 
     Views.Profile = Backbone.View.extend({
         el: '#profile-dialog',
@@ -11,16 +16,16 @@ var Application;
             'submit form': 'onChangePassword',
             'click #sign-out-button': 'onSignOut'
         },
-        
-        changePasswordModelType: Application.Models.ChangePassword,
-        sessionModelType: Application.Models.Session,
-        
+
+        ChangePasswordModel: App.Models.ChangePassword,
+        SessionModel: App.Models.Session,
+
         initialize: function () {
             this.changePasswordForm = this.$('form');
             this.$el.modal({ show: false });
-            this.listenTo(Application.events, 'showProfile', this.onShowProfile);
+            this.listenTo(App.events, 'showProfile', this.onShowProfile);
         },
-        
+
         onShowProfile: function () {
             this.changePasswordForm
                 .resetFields()
@@ -29,30 +34,32 @@ var Application;
             
             this.$el.modal('show');
         },
-        
+
         onDialogShown: function () {
             this.changePasswordForm.putFocus();
         },
-        
+
         onChangePassword: function (e) {
+            var model = new this.ChangePasswordModel(),
+                self = this;
+
             e.preventDefault();
             this.changePasswordForm
                 .hideSummaryError()
                 .hideFieldErrors();
-            
-            var model = new this.changePasswordModelType();
-            Views.Helpers.subscribeModelInvalidEvent(model, this.changePasswordForm);
 
-            var self = this;
-            
+            Views.helpers.subscribeModelInvalidEvent(model, this.changePasswordForm);
+
             model.save(this.changePasswordForm.serializeFields(), {
                 success: function() {
                     self.$el.modal('hide');
-                    Application.events.trigger('passwordChanged');
+                    App.events.trigger('passwordChanged');
                 },
                 error: function(m, jqxhr) {
-                    if (Views.Helpers.hasModelErrors(jqxhr)) {
-                        var modelErrors = Views.Helpers.getModelErrors(jqxhr);
+                    var modelErrors;
+                    if (Views.helpers.hasModelErrors(jqxhr)) {
+                        modelErrors = Views.helpers.getModelErrors(jqxhr);
+
                         if (modelErrors) {
                             self.changePasswordForm.showFieldErrors({
                                 errors: modelErrors
@@ -66,22 +73,22 @@ var Application;
                 }
             });
         },
-        
+
         onSignOut: function (e) {
+            var self = this;
+
             e.preventDefault();
-            
+
             this.$el.modal('hide');
 
-            var self = this;
-            
             $.confirm({
                 prompt: 'Are you sure you want to sign out?',
                 ok: function () {
-                    return (new self.sessionModelType({
+                    return (new self.SessionModel({
                         id: Date.now()
                     })).destroy({
                         success: function() {
-                            Application.events.trigger('signedOut');
+                            App.events.trigger('signedOut');
                         }
                     });
                 }
@@ -89,4 +96,4 @@ var Application;
         }
     });
 
-})(jQuery, Backbone, Application || (Application = {}));
+})(jQuery, _, Backbone, window.App || (window.App = {}));

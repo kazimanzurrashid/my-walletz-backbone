@@ -1,7 +1,12 @@
-﻿var Application;
+﻿/* jshint browser: true, curly: true, eqeqeq: true, forin: true, latedef: true,
+    newcap: true, noarg: true, noempty: true, nonew: true, strict:true,
+    undef: true, unused: true */
+/* global _: false, jQuery: false, Backbone: false */
 
-(function($, _, Backbone, Application) {
-    var Components = Application.Components || (Application.Components = {});
+(function($, _, Backbone, App) {
+    'use strict';
+
+    var Components = App.Components || (App.Components = {});
 
     Components.DataPager = Backbone.View.extend({
         events: {
@@ -38,23 +43,27 @@
                 return this;
             }
 
-            var pagesToShow = this.pagesToShow;
-            var pageable = this.collection;
-            var pageCount = pageable.pageCount;
-            var currentPage = pageable.pageIndex + 1;
-            var start = 1;
+            var pagesToShow = this.pagesToShow,
+                pageable = this.collection,
+                pageCount = pageable.pageCount,
+                currentPage = pageable.pageIndex + 1,
+                start = 1,
+                reminder,
+                end,
+                list,
+                i;
 
             if (currentPage > pagesToShow) {
-                var reminder = (currentPage % pagesToShow);
+                reminder = (currentPage % pagesToShow);
 
                 start = reminder === 0 ?
                     currentPage - pagesToShow + 1 :
                     currentPage - reminder + 1;
             }
 
-            var end = Math.min(start + pagesToShow - 1, pageCount);
+            end = Math.min(start + pagesToShow - 1, pageCount);
 
-            var list = $('<ul/>');
+            list = $('<ul/>');
 
             if (start > 1) {
                 if (this.showFirstAndLast) {
@@ -74,7 +83,7 @@
                 this.appendEllipsis(list);
             }
 
-            for (var i = start; i <= end; i++) {
+            for (i = start; i <= end; i++) {
                 this.appendNumber(list, i, (i === currentPage));
             }
 
@@ -121,10 +130,13 @@
         },
 
         appendNumber: function(container, page, current, text) {
-            if (!text) {
+            var el;
+
+            if (_.isUndefined(text)) {
                 text = page.toString();
             }
-            var el = this.createPage(this.numericPageTemplate({
+
+            el = this.createPage(this.numericPageTemplate({
                 text: text,
                 active: current
             }), page, current);
@@ -133,11 +145,13 @@
         },
 
         createPage: function(html, page, current) {
-            if (typeof current === 'undefined') {
+            var el;
+
+            if (_.isUndefined(current)) {
                 current = false;
             }
-
-            var el = $(html);
+            
+            el = $(html);
 
             if (!current) {
                 el.find('a').first().attr('data-page-no', page);
@@ -147,8 +161,10 @@
         },
 
         setTemplate: function(options, attribute, defaultTemplate) {
+            var template;
+
             if (options && _.has(options, attribute)) {
-                var template = $(options[attribute]);
+                template = $(options[attribute]);
                 if (template.length) {
                     this[attribute] = _.template(template.html());
                 } else {
@@ -160,18 +176,20 @@
         },
 
         handlePageChange: function(e) {
+            var page, args;
+
             e.preventDefault();
-            var page = $(e.currentTarget).attr('data-page-no');
+            page = $(e.currentTarget).attr('data-page-no');
 
             if (!page) {
                 return;
             }
 
-            var args = _.extend(e, {
+            args = _.extend(e, {
                 page: page
             });
 
             this.trigger('pageChanged', args);
         }
     });
-})(jQuery, _, Backbone, Application || (Application = {}));
+})(jQuery, _, Backbone, window.App || (window.App = {}));

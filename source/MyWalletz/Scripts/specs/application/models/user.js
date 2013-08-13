@@ -4,7 +4,7 @@ describe('Models.User', function() {
     var user;
 
     beforeEach(function() {
-        user = new Application.Models.User();
+        user = new App.Models.User();
     });
 
     describe('#defaults', function() {

@@ -7,10 +7,10 @@ describe('Views.Profile', function() {
     before(function() {
         fixtures.load('/profile.html');
         spiedListenTo = sinon.spy(
-            Application.Views.Profile.prototype,
+            App.Views.Profile.prototype,
             'listenTo');
 
-        view = new Application.Views.Profile({
+        view = new App.Views.Profile({
             el: $(fixtures.window().document.body).find('#profile-dialog')
         });
     });
@@ -23,7 +23,7 @@ describe('Views.Profile', function() {
         it('subscribes to showProfile application event', function() {
             expect(spiedListenTo)
                 .to.have.been.calledWith(
-                    Application.events, 'showProfile', view.onShowProfile);
+                    App.events, 'showProfile', view.onShowProfile);
         });
     });
 
@@ -126,7 +126,7 @@ describe('Views.Profile', function() {
                 });
 
             stubbedSubscribeModelInvalidEvent = sinon.stub(
-                Application.Views.Helpers,
+                App.Views.helpers,
                 'subscribeModelInvalidEvent',
                 function() {
                 }
@@ -148,7 +148,7 @@ describe('Views.Profile', function() {
             };
 
             stubbedModel = sinon.stub(Backbone, 'Model').returns(model);
-            view.changePasswordModelType = Backbone.Model;
+            view.ChangePasswordModel = Backbone.Model;
         });
 
         describe('form submit', function() {
@@ -190,7 +190,6 @@ describe('Views.Profile', function() {
             after(function() {
                 return spiedSave.restore();
             });
-
         });
 
         describe('persistence', function() {
@@ -206,7 +205,7 @@ describe('Views.Profile', function() {
                     });
 
                     stubbedEventsTrigger = sinon.stub(
-                        Application.events,
+                        App.events,
                         'trigger',
                         function() {
                         }
@@ -244,14 +243,14 @@ describe('Views.Profile', function() {
 
                     before(function() {
                         stubbedHasModelErrors = sinon.stub(
-                            Application.Views.Helpers,
+                            App.Views.helpers,
                             'hasModelErrors',
                             function() {
                                 return true;
                             });
 
                         stubbedGetModelErrors = sinon.stub(
-                            Application.Views.Helpers,
+                            App.Views.helpers,
                             'getModelErrors',
                             function() {
                                 return {};
@@ -291,7 +290,7 @@ describe('Views.Profile', function() {
 
                     before(function() {
                         stubbedHasModelErrors = sinon.stub(
-                            Application.Views.Helpers,
+                            App.Views.helpers,
                             'hasModelErrors',
                             function() {
                                 return false;
@@ -381,9 +380,9 @@ describe('Views.Profile', function() {
                 };
 
                 stubbedModel = sinon.stub(Backbone, 'Model').returns(model);
-                view.sessionModelType = Backbone.Model;
+                view.SessionModel = Backbone.Model;
                 sinon.stub(model, 'destroy').yieldsTo('success');
-                stubbedEventsTrigger = sinon.stub(Application.events, 'trigger', function() {
+                stubbedEventsTrigger = sinon.stub(App.events, 'trigger', function() {
                 });
 
                 view.onSignOut({

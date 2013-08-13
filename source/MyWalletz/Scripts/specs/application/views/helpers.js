@@ -1,13 +1,13 @@
 var expect = chai.expect;
 
 describe('Views.helpers', function() {
-    var Helpers = Application.Views.Helpers;
+    var helpers = App.Views.helpers;
 
     describe('.hasModelErrors', function() {
 
         describe('status 400', function() {
             it('returns true', function() {
-                expect(Helpers.hasModelErrors({
+                expect(helpers.hasModelErrors({
                     status: 400
                 })).to.be.ok;
             });
@@ -15,7 +15,7 @@ describe('Views.helpers', function() {
 
         describe('status others', function() {
             it('returns false', function() {
-                expect(Helpers.hasModelErrors({
+                expect(helpers.hasModelErrors({
                     status: 500
                 })).to.not.be.ok;
             });
@@ -26,7 +26,7 @@ describe('Views.helpers', function() {
 
         describe('empty response', function() {
             it('returns nothing', function() {
-                expect(Helpers.getModelErrors({
+                expect(helpers.getModelErrors({
                     responseText: ''
                 })).to.be.undefined;
             });
@@ -34,7 +34,7 @@ describe('Views.helpers', function() {
 
         describe('invalid response', function() {
             it('returns nothing', function() {
-                expect(Helpers.getModelErrors({
+                expect(helpers.getModelErrors({
                     responseText: '<html><body>Error</body></html>'
                 })).to.be.undefined;
             });
@@ -42,7 +42,7 @@ describe('Views.helpers', function() {
 
         describe('incorrect json response', function() {
             it('returns nothing', function() {
-                expect(Helpers.getModelErrors({
+                expect(helpers.getModelErrors({
                     responseText: JSON.stringify({
                         foo: 'bar'
                     })
@@ -52,7 +52,7 @@ describe('Views.helpers', function() {
 
         describe('camel cased model state', function() {
             it('returns errors', function() {
-                expect(Helpers.getModelErrors({
+                expect(helpers.getModelErrors({
                     responseText: JSON.stringify({
                         modelState: {
                             
@@ -64,7 +64,7 @@ describe('Views.helpers', function() {
 
         describe('title cased model state', function() {
             it('returns errors', function() {
-                expect(Helpers.getModelErrors({
+                expect(helpers.getModelErrors({
                     responseText: JSON.stringify({
                         ModelState: {
                             
@@ -76,7 +76,7 @@ describe('Views.helpers', function() {
 
         describe('lower cased model state', function() {
             it('returns errors', function() {
-                expect(Helpers.getModelErrors({
+                expect(helpers.getModelErrors({
                     responseText: JSON.stringify({
                         modelstate: {
                             
@@ -100,7 +100,7 @@ describe('Views.helpers', function() {
                 function () { });
             model = new Backbone.Model();
             spiedOn = sinon.spy(model, 'on');
-            Helpers.subscribeModelInvalidEvent(model, el);
+            helpers.subscribeModelInvalidEvent(model, el);
             model.trigger('invalid');
         });
 

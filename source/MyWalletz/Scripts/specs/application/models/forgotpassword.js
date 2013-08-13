@@ -4,7 +4,7 @@ describe('Models.ForgotPassword', function() {
     var forgotPassword;
 
     beforeEach(function() {
-        forgotPassword = new Application.Models.ForgotPassword();
+        forgotPassword = new App.Models.ForgotPassword();
     });
 
     describe('#defaults', function() {

@@ -4,16 +4,16 @@ describe('Components.Sortable', function() {
     var sortable;
 
     beforeEach(function() {
-        sortable = _.extend({}, Application.Components.Sortable);
+        sortable = _.extend({}, App.Components.Sortable);
     });
 
     describe('#resetSorting', function() {
         beforeEach(function() {
             sortable.defaultSortAttribute = 'pages';
-            sortable.defaultSortOrder = Application.Components
+            sortable.defaultSortOrder = App.Components
                 .SortOrder.descending;
             sortable.sortAttribute = 'title';
-            sortable.sortOrder = Application.Components
+            sortable.sortOrder = App.Components
                 .SortOrder.ascending;
             sortable.resetSorting();
         });
@@ -24,7 +24,7 @@ describe('Components.Sortable', function() {
 
         it('resets #sortOrder to default', function() {
             expect(sortable.sortOrder)
-                .to.equal(Application.Components.SortOrder.descending);
+                .to.equal(App.Components.SortOrder.descending);
         });
     });
 
@@ -48,7 +48,7 @@ describe('Components.Sortable', function() {
 
             describe('ascending', function() {
                 beforeEach(function() {
-                    sortable.sortOrder = Application.Components
+                    sortable.sortOrder = App.Components
                         .SortOrder.ascending;
                     result = sortable.comparator(model1, model2);
                 });
@@ -60,7 +60,7 @@ describe('Components.Sortable', function() {
 
             describe('descending', function() {
                 beforeEach(function() {
-                    sortable.sortOrder = Application.Components
+                    sortable.sortOrder = App.Components
                         .SortOrder.descending;
                     result = sortable.comparator(model1, model2);
                 });
@@ -79,7 +79,7 @@ describe('Components.Sortable', function() {
 
             describe('ascending', function() {
                 beforeEach(function() {
-                    sortable.sortOrder = Application.Components
+                    sortable.sortOrder = App.Components
                         .SortOrder.ascending;
                     result = sortable.comparator(model1, model2);
                 });
@@ -91,7 +91,7 @@ describe('Components.Sortable', function() {
 
             describe('descending', function() {
                 beforeEach(function() {
-                    sortable.sortOrder = Application.Components
+                    sortable.sortOrder = App.Components
                         .SortOrder.descending;
                     result = sortable.comparator(model1, model2);
                 });
@@ -110,7 +110,7 @@ describe('Components.Sortable', function() {
 
             describe('ascending', function() {
                 beforeEach(function() {
-                    sortable.sortOrder = Application.Components
+                    sortable.sortOrder = App.Components
                         .SortOrder.ascending;
                     result = sortable.comparator(model1, model2);
                 });
@@ -122,7 +122,7 @@ describe('Components.Sortable', function() {
 
             describe('descending', function() {
                 beforeEach(function() {
-                    sortable.sortOrder = Application.Components
+                    sortable.sortOrder = App.Components
                         .SortOrder.descending;
                     result = sortable.comparator(model1, model2);
                 });

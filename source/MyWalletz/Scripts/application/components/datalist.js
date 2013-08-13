@@ -1,7 +1,12 @@
-﻿var Application;
+﻿/* jshint browser: true, curly: true, eqeqeq: true, forin: true, latedef: true,
+    newcap: true, noarg: true, noempty: true, nonew: true, strict:true,
+    undef: true, unused: true */
+/* global _: false, jQuery: false, Backbone: false */
 
-(function($, _, Backbone, Application) {
-    var Components = Application.Components || (Application.Components = {});
+(function($, _, Backbone, App) {
+    'use strict';
+
+    var Components = App.Components || (App.Components = {});
 
     Components.DataList = Backbone.View.extend({
         events: {
@@ -35,9 +40,8 @@
         },
 
         render: function() {
-            this.removeChildViews();
-
             var self = this;
+            this.removeChildViews();
 
             this.collection
                 .each(function (model) {
@@ -94,12 +98,12 @@
         },
 
         renderChildView: function(model, includeInDom) {
-            if (typeof includeInDom === 'undefined') {
+            var childView = this.childViewFactory(model),
+                self = this;
+
+            if (_.isUndefined(includeInDom)) {
                 includeInDom = true;
             }
-
-            var childView = this.childViewFactory(model);
-            var self = this;
 
             this.listenTo(childView, 'removing', function() {
                 var index = _.indexOf(self.childViews, childView);
@@ -125,15 +129,15 @@
         },
 
         handleCommand: function(e) {
-            var element = $(e.currentTarget);
-            var command = element.attr('data-command');
-            var cid = element.closest('[data-cid]').attr('data-cid');
-            var model = this.collection.get(cid);
-            var args = _.extend(e, {
-                command: command,
-                model: model
-            });
+            var element = $(e.currentTarget),
+                command = element.attr('data-command'),
+                cid = element.closest('[data-cid]').attr('data-cid'),
+                model = this.collection.get(cid),
+                args = _.extend(e, {
+                    command: command,
+                    model: model
+                });
             this.trigger('command', args);
         }
     });
-})(jQuery, _, Backbone, Application || (Application = {}));
+})(jQuery, _, Backbone, window.App || (window.App = {}));

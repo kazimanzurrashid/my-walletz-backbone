@@ -1,7 +1,12 @@
-var Application;
+/* jshint browser: true, curly: true, eqeqeq: true, forin: true, latedef: true,
+    newcap: true, noarg: true, noempty: true, nonew: true, strict:true,
+    undef: true, unused: true */
+/* global _: false, Backbone: false */
 
-(function(_, Backbone, Application) {
-    var Models = Application.Models || (Application.Models = {});
+(function(_, Backbone, App) {
+    'use strict';
+
+    var Models = App.Models || (App.Models = {});
 
     Models.CategoryType = {
         expense: 'Expense',
@@ -29,17 +34,17 @@ var Application;
         },
 
         validate: function(attributes) {
-            var Validation = Models.Validation;
-            var errors = {};
+            var validation = Models.validation,
+                errors = {};
 
             if (!attributes.title) {
-                Validation.addError(errors, 'title', 'Title is required.');
+                validation.addError(errors, 'title', 'Title is required.');
             }
 
             if (attributes.type) {
                 if (!_.include(
                         _.values(Models.CategoryType), attributes.type)) {
-                    Validation.addError(
+                    validation.addError(
                         errors,
                         'type',
                         'Type must be any of the following (' +
@@ -47,7 +52,7 @@ var Application;
                          ') value.');
                 }
             } else {
-                Validation.addError(errors, 'type', 'Type is required.');
+                validation.addError(errors, 'type', 'Type is required.');
             }
 
             return _.isEmpty(errors) ? void(0) : errors;
@@ -58,8 +63,8 @@ var Application;
         model: Models.Category,
 
         url: function() {
-            return Application.serverUrlPrefix + '/categories';
+            return App.serverUrlPrefix + '/categories';
         }
     });
 
-})(_, Backbone, Application || (Application = {}));
+})(_, Backbone, window.App || (window.App = {}));

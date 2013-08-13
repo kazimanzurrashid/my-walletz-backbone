@@ -11,7 +11,7 @@ describe('Views.CategoryTabbedList', function () {
         fixtures.set('<div id=\"category-list-page\"></div>');
 
         stubbedCategoryList = sinon.stub(
-            Application.Views,
+            App.Views,
             'CategoryList',
             function() {
                 return {
@@ -22,7 +22,7 @@ describe('Views.CategoryTabbedList', function () {
             });
 
         stubbedSelector = sinon.stub(
-            Application.Views.CategoryTabbedList.prototype,
+            App.Views.CategoryTabbedList.prototype,
             '$',
             function() {
                 return {
@@ -33,14 +33,14 @@ describe('Views.CategoryTabbedList', function () {
             });
 
         stubbedListenTo = sinon.stub(
-            Application.Views.CategoryTabbedList.prototype,
+            App.Views.CategoryTabbedList.prototype,
             'listenTo',
             function() {
             });
 
-        collection = new Application.Models.Categories();
+        collection = new App.Models.Categories();
 
-        view = new Application.Views.CategoryTabbedList({
+        view = new App.Views.CategoryTabbedList({
             el: $(fixtures.window().document.body).find('#category-list-page'),
             collection: collection
         });

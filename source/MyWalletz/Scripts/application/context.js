@@ -1,18 +1,22 @@
-var Application;
+/* jshint browser: true, curly: true, eqeqeq: true, forin: true, latedef: true,
+    newcap: true, noarg: true, noempty: true, nonew: true, strict:true,
+    undef: true, unused: true */
+/* global _: false */
 
-(function (Application) {
+(function (_, App) {
+    'use strict';
 
-    Application.Context = (function() {
+    App.Context = (function() {
 
         function Context(options) {
-            var Models = Application.Models;
+            var Models = App.Models;
 
-            this.categories = new Application.Models.Categories;
+            this.categories = new App.Models.Categories();
             if (options && options.categories && options.categories.length) {
                 this.categories.reset(options.categories);
             }
 
-            this.accounts = new Application.Models.Accounts;
+            this.accounts = new App.Models.Accounts();
             if (options && options.accounts && options.accounts.length) {
                 this.accounts.reset(options.accounts);
             }
@@ -31,7 +35,9 @@ var Application;
             },
             
             userSignedIn: function (options) {
-                options || (options = { load: true });
+                if (_.isUndefined(options)) {
+                    options = { load: true };
+                }
                 
                 this.signedIn = true;
                 
@@ -64,4 +70,4 @@ var Application;
         return Context;
     })();
 
-})(Application || (Application = {}));
+})(_, window.App || (window.App = {}));

@@ -1,7 +1,12 @@
-﻿var Application;
+﻿/* jshint browser: true, curly: true, eqeqeq: true, forin: true, latedef: true,
+    newcap: true, noarg: true, noempty: true, nonew: true, strict:true,
+    undef: true, unused: true */
+/* global _: false */
 
-(function (_, Application) {
-    var Components = Application.Components || (Application.Components = {});
+(function (_, App) {
+    'use strict';
+
+    var Components = App.Components || (App.Components = {});
     
     Components.SortOrder = {
         ascending: 0,
@@ -18,11 +23,11 @@
 
         comparator: function (model1, model2) {
             var sortAttribute = this.sortAttribute ||
-                _.chain(model1.attributes).keys().first().value();
-            var sortOrder = this.sortOrder || Components.SortOrder.ascending;
-            var attribute1 = model1.get(sortAttribute);
-            var attribute2 = model2.get(sortAttribute);
-            var result = 0;
+                _.chain(model1.attributes).keys().first().value(),
+                sortOrder = this.sortOrder || Components.SortOrder.ascending,
+                attribute1 = model1.get(sortAttribute),
+                attribute2 = model2.get(sortAttribute),
+                result = 0;
 
             if (attribute1 > attribute2) {
                 result = 1;
@@ -40,4 +45,4 @@
             return result;
         }
     });
-})(_, Application || (Application = {}));
+})(_, window.App || (window.App = {}));

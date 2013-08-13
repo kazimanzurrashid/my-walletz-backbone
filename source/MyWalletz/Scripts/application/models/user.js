@@ -1,11 +1,16 @@
-var Application;
+/* jshint browser: true, curly: true, eqeqeq: true, forin: true, latedef: true,
+    newcap: true, noarg: true, noempty: true, nonew: true, strict:true,
+    undef: true, unused: true */
+/* global _: false, Backbone: false */
 
-(function (_, Backbone, Application) {
-    var Models = Application.Models || (Application.Models = {});
+(function (_, Backbone, App) {
+    'use strict';
+
+    var Models = App.Models || (App.Models = {});
 
     Models.User = Backbone.Model.extend({
         urlRoot: function () {
-            return Application.serverUrlPrefix + '/users';
+            return App.serverUrlPrefix + '/users';
         },
 
         defaults: function () {
@@ -17,29 +22,29 @@ var Application;
         },
 
         validate: function (attributes) {
-            var Validation = Models.Validation;
-            var errors = {};
+            var validation = Models.validation,
+                errors = {};
 
             if (attributes.email) {
-                if (!Validation.isValidEmailFormat(attributes.email)) {
-                    Validation.addError(
+                if (!validation.isValidEmailFormat(attributes.email)) {
+                    validation.addError(
                         errors,
                         'email',
                         'Invalid email address format.');
                 }
             } else {
-                Validation.addError(errors, 'email', 'Email is required.');
+                validation.addError(errors, 'email', 'Email is required.');
             }
 
             if (attributes.password) {
-                if (!Validation.isValidPasswordLength(attributes.password)) {
-                    Validation.addError(
+                if (!validation.isValidPasswordLength(attributes.password)) {
+                    validation.addError(
                         errors,
                         'password',
                         'Password length must be between 6 to 64 characters.');
                 }
             } else {
-                Validation.addError(
+                validation.addError(
                     errors,
                     'password',
                     'Password is required.');
@@ -47,13 +52,13 @@ var Application;
 
             if (attributes.confirmPassword) {
                 if (attributes.confirmPassword !== attributes.password) {
-                    Validation.addError(
+                    validation.addError(
                         errors,
                         'confirmPassword',
                         'Password and confirm password do not match.');
                 }
             } else {
-                Validation.addError(
+                validation.addError(
                     errors,
                     'confirmPassword',
                     'Confirm password is required.');
@@ -63,4 +68,4 @@ var Application;
         }
     });
 
-})(_, Backbone, Application || (Application = {}));
+})(_, Backbone, window.App || (window.App = {}));

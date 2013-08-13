@@ -1,15 +1,19 @@
-var Application;
+/* jshint browser: true, curly: true, eqeqeq: true, forin: true, latedef: true,
+    newcap: true, noarg: true, noempty: true, nonew: true, strict:true,
+    undef: true, unused: true */
+/* global _: false, jQuery: false, Backbone: false */
 
-(function ($, _, Backbone, Application) {
+(function ($, _, Backbone, App) {
+    'use strict';
 
     function hasClientUrl() {
         var hash = window.location.hash;
 
-        if (hash.length > Application.clientUrlPrefix.length) {
+        if (hash.length > App.clientUrlPrefix.length) {
             return true;
         }
 
-        if (Application.clientUrlPrefix.indexOf(hash) === 0) {
+        if (App.clientUrlPrefix.indexOf(hash) === 0) {
             return false;
         }
 
@@ -17,54 +21,56 @@ var Application;
     }
 
     function redirectToDefault() {
-        Application.router.navigate(clientUrl('/'), true);
+        App.router.navigate(clientUrl('/'), true);
     }
 
     function showInfobar(message) {
-        _.delay(function () { $.showInfobar(message); }, 400);
+        _.delay(function() {
+            $.showInfobar(message);
+        }, 400);
     }
     
     function attachEventHandlers() {
-        Application.events.on('myAccount', function() {
-            var eventName = Application.context.isUserSignedIn() ?
+        App.events.on('myAccount', function() {
+            var eventName = App.context.isUserSignedIn() ?
                 'showProfile' :
                 'showMembership';
-            Application.events.trigger(eventName);
+            App.events.trigger(eventName);
         });
 
-        Application.events.on('signedIn', function() {
-            Application.context.userSignedIn();
+        App.events.on('signedIn', function() {
+            App.context.userSignedIn();
             showInfobar('You are now signed in.');
         });
 
-        Application.events.on('passwordResetRequested', function() {
+        App.events.on('passwordResetRequested', function() {
             var message = 'An email with a password reset link has been ' +
                 'sent to your email address. Please open the link to reset ' +
                 'your password.';
             showInfobar(message);
         });
 
-        Application.events.on('signedUp', function() {
+        App.events.on('signedUp', function() {
             var message = 'Thank you for signing up, an email with a ' +
                 'confirmation link has been sent to your email address. ' +
                 'Please open the link to activate your account.';
             showInfobar(message);
         });
 
-        Application.events.on('passwordChanged', function() {
+        App.events.on('passwordChanged', function() {
             showInfobar('You have changed your password successfully.');
         });
 
-        Application.events.on('signedOut', function() {
-            Application.context.userSignedOut();
+        App.events.on('signedOut', function() {
+            App.context.userSignedOut();
             redirectToDefault();
             showInfobar('You are now signed out.');
         });
     }
     
     function createViews() {
-        Application.membershipView = new Application.Views.Membership();
-        Application.profileView = new Application.Views.Profile();
+        App.membershipView = new App.Views.Membership();
+        App.profileView = new App.Views.Profile();
     }
     
     function clientUrl() {
@@ -74,17 +80,17 @@ var Application;
             path = path.substring(1);
         }
 
-        return Application.clientUrlPrefix + path;
+        return App.clientUrlPrefix + path;
     }
 
     function start(options) {
-        Application.context = new Application.Context(options);
+        App.context = new App.Context(options);
         
         createViews();
         attachEventHandlers();
         
-        Application.router = new Application.Router({
-            context: Application.context
+        App.router = new App.Router({
+            context: App.context
         });
 
         Backbone.history.start();
@@ -94,7 +100,7 @@ var Application;
         }
     }
 
-    Application.clientUrl = clientUrl;
-    Application.start = start;
+    App.clientUrl = clientUrl;
+    App.start = start;
 
-})(jQuery, _, Backbone, Application || (Application = {}));
+})(jQuery, _, Backbone, window.App || (window.App = {}));

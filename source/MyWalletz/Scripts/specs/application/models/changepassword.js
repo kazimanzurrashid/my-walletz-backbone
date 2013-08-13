@@ -4,7 +4,7 @@ describe('Models.ChangePassword', function() {
     var changePassword;
 
     beforeEach(function() {
-        changePassword = new Application.Models.ChangePassword();
+        changePassword = new App.Models.ChangePassword();
     });
 
     describe('#defaults', function() {

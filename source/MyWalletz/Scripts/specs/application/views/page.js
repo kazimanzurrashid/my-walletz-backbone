@@ -8,7 +8,7 @@ describe('Views.Page', function() {
         model = new Backbone.Model({
             message: 'Hello world'
         });
-        view = new Application.Views.Page({
+        view = new App.Views.Page({
             model: model,
             template: _.template('<span>{{message}}</span>')
         });

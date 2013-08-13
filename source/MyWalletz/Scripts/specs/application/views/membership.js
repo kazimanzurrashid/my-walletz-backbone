@@ -5,7 +5,7 @@ describe('Views.MembershipChildForm', function() {
 
     before(function() {
         fixtures.set('<form id="form"></form>');
-        view = new Application.Views.MembershipChildForm({
+        view = new App.Views.MembershipChildForm({
             el: $(fixtures.window().document.body).find('#form')
         });
     });
@@ -24,10 +24,10 @@ describe('Views.MembershipChildForm', function() {
                 }
             };
             stubbedModel = sinon.stub(Backbone, 'Model').returns(model);
-            view.modelType = Backbone.Model;
+            view.Model = Backbone.Model;
 
             stubbedSubscribeModelInvalidEvent = sinon.stub(
-                Application.Views.Helpers,
+                App.Views.helpers,
                 'subscribeModelInvalidEvent', function() {
                 });
 
@@ -107,7 +107,7 @@ describe('Views.MembershipChildForm', function() {
                         .yieldsTo('success');
 
                     stubbedTrigger = sinon.stub(
-                        Application.events,
+                        App.events,
                         'trigger',
                         function() {
                         });
@@ -175,25 +175,25 @@ describe('Views.MembershipChildForm', function() {
 });
 
 describe('Views.Membership', function() {
-    var originalSignInViewType;
-    var originalForgotPasswordViewType;
-    var originalSignUpViewType;
+    var originalSignInView;
+    var originalForgotPasswordView;
+    var originalSignUpView;
     var spiedListenTo;
     var view;
-    var Membership = Application.Views.Membership;
+    var Membership = App.Views.Membership;
 
     before(function() {
-        originalSignInViewType = Membership.prototype.signInViewType;
-        originalForgotPasswordViewType = Membership
-            .prototype.forgotPasswordViewType;
-        originalSignUpViewType = Membership.prototype.signUpViewType;
-        Membership.prototype.signInViewType = sinon.stub()
+        originalSignInView = Membership.prototype.SignInView;
+        originalForgotPasswordView = Membership
+            .prototype.ForgotPasswordView;
+        originalSignUpView = Membership.prototype.SignUpView;
+        Membership.prototype.SignInView = sinon.stub()
             .returns({});
         
-        Membership.prototype.forgotPasswordViewType = sinon.stub()
+        Membership.prototype.ForgotPasswordView = sinon.stub()
             .returns({});
         
-        Membership.prototype.signUpViewType = sinon.stub()
+        Membership.prototype.SignUpView = sinon.stub()
             .returns({});
         
         spiedListenTo = sinon.spy(Membership.prototype, 'listenTo');
@@ -223,7 +223,7 @@ describe('Views.Membership', function() {
         it('subscribes to showMembership application event', function() {
             expect(spiedListenTo)
                 .to.have.been.calledWith(
-                    Application.events,
+                    App.events,
                     'showMembership',
                     view.onShowMembership);
         });
@@ -231,7 +231,7 @@ describe('Views.Membership', function() {
         it('subscribes to signedIn passwordResetRequested and signedUp application events', function() {
             expect(spiedListenTo)
                 .to.have.been.calledWith(
-                    Application.events,
+                    App.events,
                     'signedIn passwordResetRequested signedUp',
                     view.onSignedInOrPasswordResetRequestedOrSignedUp);
         });
@@ -480,9 +480,9 @@ describe('Views.Membership', function() {
         view.undelegateEvents();
         view.stopListening();
         spiedListenTo.restore();
-        Membership.prototype.signInViewType = originalSignInViewType;
-        Membership.prototype.forgotPasswordViewType = originalForgotPasswordViewType;
-        Membership.prototype.signUpViewType = originalSignUpViewType;
+        Membership.prototype.SignInView = originalSignInView;
+        Membership.prototype.ForgotPasswordView = originalForgotPasswordView;
+        Membership.prototype.SignUpView = originalSignUpView;
         fixtures.cleanUp();
     });
 });

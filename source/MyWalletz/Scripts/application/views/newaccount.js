@@ -1,7 +1,12 @@
-﻿var Application;
+﻿/* jshint browser: true, curly: true, eqeqeq: true, forin: true, latedef: true,
+    newcap: true, noarg: true, noempty: true, nonew: true, strict:true,
+    undef: true, unused: true */
+/* global jQuery: false, _: false, Backbone: false */
 
-(function ($, _, Backbone, Application) {
-    var Views = Application.Views || (Application.Views = {});
+(function ($, _, Backbone, App) {
+    'use strict';
+
+    var Views = App.Views || (App.Views = {});
 
     Views.NewAccount = Backbone.View.extend({
         el: '#new-account-page',
@@ -24,14 +29,16 @@
         },
 
         onSave: function(e) {
+            var account = new App.Models.Account(),
+                self = this,
+                attributes;
+
             e.preventDefault();
             this.form.hideFieldErrors();
 
-            var account = new Application.Models.Account;
+            Views.helpers.subscribeModelInvalidEvent(account, this.form);
 
-            Views.Helpers.subscribeModelInvalidEvent(account, this.form);
-
-            var attributes = _.extend(this.form.serializeFields(), {
+            attributes = _.extend(this.form.serializeFields(), {
                 createdAt: new Date()
             });
 
@@ -39,20 +46,20 @@
                 return;
             }
 
-            var self = this;
-
             this.collection.create(account, {
                 wait: true,
                 validate: false,
                 success: function() {
                     self.router.navigate(
-                        Application.clientUrl('/accounts'),
+                        App.clientUrl('/accounts'),
                         true);
                     $.showSuccessbar('New account created.');
                 },
                 error: function(model, jqxhr) {
-                    if (Views.Helpers.hasModelErrors(jqxhr)) {
-                        var modelErrors = Views.Helpers.getModelErrors(jqxhr);
+                    var modelErrors;
+
+                    if (Views.helpers.hasModelErrors(jqxhr)) {
+                        modelErrors = Views.helpers.getModelErrors(jqxhr);
                         if (modelErrors) {
                             self.form.showFieldErrors({
                                 errors: modelErrors
@@ -69,4 +76,4 @@
 
     _.extend(Views.NewAccount.prototype, Views.Activable);
 
-})(jQuery, _, Backbone, Application || (Application = {}));
+})(jQuery, _, Backbone, window.App || (window.App = {}));

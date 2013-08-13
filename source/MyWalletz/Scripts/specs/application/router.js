@@ -36,14 +36,14 @@ describe.skip('Router', function() {
             }
         };
 
-        stubbedNavigationView = sinon.stub(Application.Views, 'Navigation')
+        stubbedNavigationView = sinon.stub(App.Views, 'Navigation')
             .returns(navigationView);
         
-        stubbedPageView = sinon.stub(Application.Views, 'Page', function() {
+        stubbedPageView = sinon.stub(App.Views, 'Page', function() {
             return new contentView();
         });
 
-        stubbedNotFoundView = sinon.stub(Application.Views, 'NotFound', function() {
+        stubbedNotFoundView = sinon.stub(App.Views, 'NotFound', function() {
             return new contentView();
         });
 

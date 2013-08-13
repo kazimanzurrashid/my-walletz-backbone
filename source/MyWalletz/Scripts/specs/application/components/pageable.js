@@ -4,7 +4,7 @@ describe('Components.Pageable', function() {
     var pageable;
 
     beforeEach(function() {
-        pageable = _.extend({}, Application.Components.Pageable);
+        pageable = _.extend({}, App.Components.Pageable);
     });
 
     describe('#resetPaging', function() {
@@ -77,7 +77,7 @@ describe('Components.Pageable', function() {
             pageable.pageIndex = 3;
             pageable.pageSize = 10;
             pageable.sortAttribute = 'title';
-            pageable.sortOrder = Application.Components.SortOrder.descending;
+            pageable.sortOrder = App.Components.SortOrder.descending;
             pageable.url = function() {
                 return '/endpoint';
             };

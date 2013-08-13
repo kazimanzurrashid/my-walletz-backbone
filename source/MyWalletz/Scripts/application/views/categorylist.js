@@ -1,7 +1,12 @@
-﻿var Application;
+﻿/* jshint browser: true, curly: true, eqeqeq: true, forin: true, latedef: true,
+    newcap: true, noarg: true, noempty: true, nonew: true, strict:true,
+    undef: true, unused: true */
+/* global jQuery: false, _: false, Backbone: false */
 
-(function ($, _, Backbone, Application) {
-    var Views = Application.Views || (Application.Views = {});
+(function ($, _, Backbone, App) {
+    'use strict';
+
+    var Views = App.Views || (App.Views = {});
 
     Views.CategoryListItem = Backbone.View.extend({
         tagName: 'li',
@@ -115,7 +120,7 @@
 
         initialize: function(options) {
             this.type = options.type;
-            this.dataList = new Application.Components.DataList({
+            this.dataList = new App.Components.DataList({
                 el: this.$('> ol'),
                 childViewFactory: function(model) {
                     return new Views.CategoryListItem({
@@ -124,7 +129,7 @@
                     });
                 },
                 collection: this.collection,
-                itemInsertMode: Application.Components.DomInsertMode.append
+                itemInsertMode: App.Components.DomInsertMode.append
             });
 
             this.listenTo(this.dataList, 'command', this.onCommand);
@@ -176,14 +181,16 @@
         },
 
         onCreate: function(e) {
+            var textbox, title;
+
             if (e.which !== 13) {
                 return;
             }
 
             e.preventDefault();
 
-            var textbox = $(e.currentTarget);
-            var title = textbox.val();
+            textbox = $(e.currentTarget);
+            title = textbox.val();
 
             if (!title) {
                 return;
@@ -211,10 +218,11 @@
         el: '#category-list-page',
 
         initialize: function() {
-            var Models = Application.Models;
-
-            var expenses = new Models.Categories;
-            var incomes = new Models.Categories;
+            var Models = App.Models,
+                expenses = new Models.Categories(),
+                incomes = new Models.Categories(),
+                self = this,
+                template = _.template(this.$('#category-list-item-template').html());
 
             expenses.reset(this.filterExpenses(this.collection));
             incomes.reset(this.filterIncomes(this.collection));
@@ -222,15 +230,10 @@
             this.attachSync(expenses);
             this.attachSync(incomes);
 
-            var self = this;
-
             this.listenTo(this.collection, 'reset', function() {
                 expenses.reset(self.filterExpenses(self.collection));
                 incomes.reset(self.filterIncomes(self.collection));
             });
-
-            var template = _.template(
-                this.$('#category-list-item-template').html());
 
             this.expenseList = new Views.CategoryList({
                 collection: expenses,
@@ -288,4 +291,4 @@
 
     _.extend(Views.CategoryTabbedList.prototype, Views.Activable);
 
-})(jQuery, _, Backbone, Application || (Application = {}));
+})(jQuery, _, Backbone, window.App || (window.App = {}));

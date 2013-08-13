@@ -1,11 +1,16 @@
-var Application;
+/* jshint browser: true, curly: true, eqeqeq: true, forin: true, latedef: true,
+    newcap: true, noarg: true, noempty: true, nonew: true, strict:true,
+    undef: true, unused: true */
+/* global _: false, Backbone: false */
 
-(function (_, Backbone, Application) {
-    var Models = Application.Models || (Application.Models = {});
+(function (_, Backbone, App) {
+    'use strict';
+
+    var Models = App.Models || (App.Models = {});
 
     Models.ForgotPassword = Backbone.Model.extend({
         urlRoot: function() {
-            return Application.serverUrlPrefix + '/passwords/forgot';
+            return App.serverUrlPrefix + '/passwords/forgot';
         },
         
         defaults: function() {
@@ -13,24 +18,24 @@ var Application;
               email: null  
             };
         },
-        
+
         validate: function (attributes) {
-            var Validation = Models.Validation;
-            var errors = {};
+            var validation = Models.validation,
+                errors = {};
 
             if (attributes.email) {
-                if (!Validation.isValidEmailFormat(attributes.email)) {
-                    Validation.addError(
+                if (!validation.isValidEmailFormat(attributes.email)) {
+                    validation.addError(
                         errors,
                         'email',
                         'Invalid email address format.');
                 }
             } else {
-                Validation.addError(errors, 'email', 'Email is required.');
+                validation.addError(errors, 'email', 'Email is required.');
             }
 
             return _.isEmpty(errors) ? void(0) : errors;
         }
     });
 
-})(_, Backbone, Application || (Application = {}));
+})(_, Backbone, window.App || (window.App = {}));

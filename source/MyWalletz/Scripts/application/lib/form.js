@@ -1,12 +1,28 @@
-(function($, _) {
-    $.fn.serializeFields = function() {
-        var fields = {};
+/* jshint browser: true, curly: true, eqeqeq: true, forin: true, latedef: true,
+    newcap: true, noarg: true, noempty: true, nonew: true, strict:true,
+    undef: true, unused: true */
+/* global _: false, jQuery: false */
 
-        this.each(function() {
+(function($, _) {
+    'use strict';
+
+    var SLIDE_DURATION = 400,
+        DISPLAY_TIMEOUT = 1000 * 5;
+
+    $.fn.serializeFields = function() {
+        var container = $(this),
+            fields = {};
+
+        if (!container.is('form')) {
+            container = container.find('form');
+        }
+        
+        container.each(function() {
             $.each($(this).serializeArray(), function() {
                 fields[this.name] = this.value;
             });
         });
+
         return fields;
     };
 
@@ -36,137 +52,170 @@
 
     $.fn.putFocus = function() {
         var self = this;
-
         _.delay(function() {
             self.find(':input')
                 .not(':button')
                 .not(':disabled')
                 .first()
+                .select()
                 .focus();
-        }, 100);
+        }, 80);
 
         return this;
-    };
-
-    var animationDuration = 400;
-    var timeout = 1000 * 5;
-
-    $.fn.hideFieldErrors = function() {
-        return this.each(function() {
-            $(this).find('.control-group')
-                .filter('.error')
-                .removeClass('error')
-                .find('.help-block,.help-inline')
-                .slideUp(animationDuration, function() {
-                    $(this).remove();
-                });
-        });
-    };
-
-    $.fn.showFieldErrors = function(options) {
-        var opt = $.extend({
-            inline: false,
-            errors: {}
-        }, options);
-
-        var cssClass = opt.inline ? 'help-inline' : 'help-block';
-        var errors = opt.errors || {};
-        var firstInput = null;
-
-        this.each(function() {
-            $(this).find(':input').each(function() {
-                var input = $(this);
-                var inputName = input.attr('name');
-
-                if (!inputName) {
-                    return;
-                }
-
-                var lowerCasedName = inputName.toLocaleLowerCase();
-                _.chain(errors).keys().filter(function(key) {
-                    return errors[key].length;
-                }).filter(function(key) {
-                    return key.toLowerCase() === lowerCasedName;
-                }).each(function(key) {
-                    if (!firstInput) {
-                        firstInput = input;
-                    }
-                    input.closest('.control-group').addClass('error');
-                    var container = opt.inline ?
-                        input.parent() :
-                        input.closest('.controls');
-
-                    _.each(errors[key], function(message) {
-                        $('<span>', {
-                            text: message,
-                            'class': cssClass
-                        }).appendTo(container)
-                            .hide()
-                            .slideDown(animationDuration);
-                    });
-                });
-            });
-        });
-
-        if (firstInput) {
-            firstInput.focus();
-        }
-
-        var self = this;
-
-        _.delay(function() {
-            $(self).hideFieldErrors();
-        }, timeout);
-
-        return this;
-    };
-
-    $.fn.hideSummaryError = function() {
-        return this.each(function() {
-            var container = $(this);
-
-            if (!container.is('form')) {
-                container = container.find('form');
-            }
-
-            container.find('.alert')
-                .slideUp(animationDuration, function() {
-                    $(this).remove();
-                });
-        });
     };
 
     (function() {
-        var template = _.template(
+        $.fn.hideFieldErrors = function (options) {
+            var opts = $.extend({}, $.fn.hideFieldErrors.defaults, options);
+
+            return this.each(function () {
+                $(this).find('.control-group')
+                    .filter('.error')
+                    .removeClass('error')
+                    .find('.help-block,.help-inline')
+                    .slideUp(opts.slideDuration, function () {
+                        $(this).remove();
+                    });
+            });
+        };
+
+        $.fn.hideFieldErrors.defaults = {
+            slideDuration: SLIDE_DURATION
+        };
+    })();
+
+    (function() {
+        $.fn.showFieldErrors = function(options) {
+            var self = this,
+                opts = $.extend({}, $.fn.showFieldErrors.defaults, options),
+                firstInput = null;
+
+            this.each(function() {
+                $(this).find(':input')
+                    .each(function() {
+                        var input = $(this),
+                            inputName = input.attr('name'),
+                            lowerCasedName;
+
+                        if (!inputName) {
+                            return;
+                        }
+
+                        lowerCasedName = inputName.toLocaleLowerCase();
+
+                        _.chain(opts.errors)
+                            .keys()
+                            .filter(function(key) {
+                                return opts.errors[key].length;
+                            })
+                            .filter(function(key) {
+                                return key.toLowerCase() === lowerCasedName;
+                            })
+                            .each(function(key) {
+                                var container;
+
+                                if (!firstInput) {
+                                    firstInput = input;
+                                }
+
+                                input.closest('.control-group').addClass('error');
+                                container = opts.inline ?
+                                    input.parent() :
+                                    input.closest('.controls');
+
+                                _.each(opts.errors[key], function(message) {
+                                    $('<span>', {
+                                        text: message,
+                                        'class': opts.inline ?
+                                            'help-inline' :
+                                            'help-block'
+                                    }).appendTo(container)
+                                        .hide()
+                                        .slideDown(opts.slideDuration);
+                                });
+                            });
+                    });
+            });
+
+            if (firstInput) {
+                firstInput.focus();
+            }
+
+            _.delay(function() {
+                $(self).hideFieldErrors();
+            }, opts.displayTimeout);
+
+            return this;
+        };
+
+        $.fn.showFieldErrors.defaults = {
+            slideDuration: SLIDE_DURATION,
+            displayTimeout: DISPLAY_TIMEOUT,
+            inline: false,
+            errors: {}
+        };
+    })();
+
+    (function() {
+        $.fn.hideSummaryError = function(options) {
+            var opts = $.extend({}, $.fn.hideSummaryError.defaults, options);
+
+            return this.each(function() {
+                var container = $(this);
+
+                if (!container.is('form')) {
+                    container = container.find('form');
+                }
+
+                container.find('.alert')
+                    .slideUp(opts.slideDuration, function() {
+                        $(this).remove();
+                    });
+            });
+        };
+
+        $.fn.hideSummaryError.defaults = {
+            slideDuration: SLIDE_DURATION
+        };
+    })();
+
+    (function() {
+        var template = _(
             '<div class="alert alert-error fade in">' +
                 '<button type="button" class="close" data-dismiss="alert" title="close">&times;</button>' +
                 '<strong>Error!</strong> ' +
                 '<span>{{message}}</span>' +
-                '</div>');
+            '</div>').template();
 
         $.fn.showSummaryError = function(options) {
-            var opt = $.extend({
-                message: 'An unexpected error has occurred while performing your last operation.'
-            }, options);
+            var opts = $.extend({}, $.fn.showSummaryError.defaults, options);
 
             return this.each(function() {
-                var container = $(this);
-                
+                var self = this,
+                    container = $(this);
+
                 if (!container.is('form')) {
                     container = container.find('form');
                 }
-                
+
                 $(template({
-                    message: opt.message
+                    message: opts.message
                 })).prependTo(container)
                     .hide()
-                    .slideDown(animationDuration);
+                    .slideDown(opts.slideDuration);
 
-                var self = this;
                 _.delay(function() {
-                    return $(self).hideSummaryError();
-                }, timeout);
+                    $(self).hideSummaryError();
+                }, opts.displayTimeout);
             });
         };
+
+        $.fn.showSummaryError.defaults = {
+            slideDuration: SLIDE_DURATION,
+            displayTimeout: DISPLAY_TIMEOUT,
+            message: 'An unexpected error has occurred while performing ' +
+                'your last operation.'
+        };
     })();
+
 })(jQuery, _);

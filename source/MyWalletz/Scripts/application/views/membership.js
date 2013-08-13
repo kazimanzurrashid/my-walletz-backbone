@@ -1,31 +1,36 @@
-var Application;
+/* jshint browser: true, curly: true, eqeqeq: true, forin: true, latedef: true,
+    newcap: true, noarg: true, noempty: true, nonew: true, strict:true,
+    undef: true, unused: true */
+/* global _: false, Backbone: false */
 
-(function (Backbone, Application) {
-    var Views = Application.Views || (Application.Views = {});
+(function (_, Backbone, App) {
+    'use strict';
+
+    var Views = App.Views || (App.Views = {});
 
     Views.MembershipChildForm = Backbone.View.extend({
         events: {
             'submit': 'onSubmit'
         },
-        
-        handleError: function(jqxhr) {
+
+        handleError: function() {
             throw new Error('Not Implemented');
         },
-        
+
         onSubmit: function(e) {
+            var self = this,
+                model = new this.Model();
+
             e.preventDefault();
 
             this.$el.hideSummaryError()
                 .hideFieldErrors();
 
-            var model = new this.modelType();
-            
-            Views.Helpers.subscribeModelInvalidEvent(model, this.$el);
-            var self = this;
+            Views.helpers.subscribeModelInvalidEvent(model, this.$el);
             
             model.save(this.$el.serializeFields(), {
                 success: function () {
-                    return Application.events.trigger(self.successEvent);
+                    return App.events.trigger(self.successEvent);
                 },
                 error: function (m, jqxhr) {
                     return self.handleError(jqxhr);
@@ -36,11 +41,11 @@ var Application;
 
     Views.SignIn = Views.MembershipChildForm.extend({
         el: '#sign-in-form',
-        modelType: Application.Models.Session,
+        Model: App.Models.Session,
         successEvent: 'signedIn',
-        
+
         handleError: function (jqxhr) {
-            var message = Views.Helpers.hasModelErrors(jqxhr) ?
+            var message = Views.helpers.hasModelErrors(jqxhr) ?
                 'Invalid credentials.' :
                 'An unexpected error has occurred while signing in.';
 
@@ -49,10 +54,10 @@ var Application;
             });
         }
     });
-    
+
     Views.ForgotPassword = Views.MembershipChildForm.extend({
         el: '#forgot-password-form',
-        modelType: Application.Models.ForgotPassword,
+        Model: App.Models.ForgotPassword,
         successEvent: 'passwordResetRequested',
 
         handleError: function () {
@@ -62,15 +67,17 @@ var Application;
             });
         }
     });
-    
+
     Views.SignUp = Views.MembershipChildForm.extend({
         el: '#sign-up-form',
-        modelType: Application.Models.User,
+        Model: App.Models.User,
         successEvent: 'signedUp',
 
         handleError: function (jqxhr) {
-            if (Views.Helpers.hasModelErrors(jqxhr)) {
-                var modelErrors = Views.Helpers.getModelErrors(jqxhr);
+            var modelErrors;
+
+            if (Views.helpers.hasModelErrors(jqxhr)) {
+                modelErrors = Views.helpers.getModelErrors(jqxhr);
                 if (modelErrors) {
                     this.$el.showFieldErrors({
                         errors: modelErrors
@@ -78,7 +85,7 @@ var Application;
                     return;
                 }
             }
-            
+
             this.$el.showSummaryError({
                 message: 'An unexpected error has occurred while ' +
                     'signing up.'
@@ -94,61 +101,61 @@ var Application;
             'shown': 'onDialogShown',
             'hidden': 'onDialogHidden'
         },
-        
-        signInViewType: Views.SignIn,
-        forgotPasswordViewType: Views.ForgotPassword,
-        signUpViewType: Views.SignUp,
-        
+
+        SignInView: Views.SignIn,
+        ForgotPasswordView: Views.ForgotPassword,
+        SignUpView: Views.SignUp,
+
         initialize: function() {
-            this.signIn = new this.signInViewType();
-            this.forgotPassword = new this.forgotPasswordViewType();
-            this.signUp = new this.signUpViewType();
+            this.signIn = new this.SignInView();
+            this.forgotPassword = new this.ForgotPasswordView();
+            this.signUp = new this.SignUpView();
             
             this.firstTab = this.$('a[data-toggle="tab"]').first();
             
             this.$el.modal({ show: false });
 
             this.listenTo(
-                Application.events,
+                App.events,
                 'showMembership',
                 this.onShowMembership);
             
             this.listenTo(
-                Application.events,
+                App.events,
                 'signedIn passwordResetRequested signedUp',
                 this.onSignedInOrPasswordResetRequestedOrSignedUp);
         },
-        
+
         onShowMembership: function(e) {
             this.ok = (e && e.ok && _.isFunction(e.ok)) ? e.ok : void (0);
             this.cancel = (e && e.cancel && _.isFunction(e.cancel)) ? e.cancel : void (0);
             this.firstTab.trigger('click');
             this.$el.modal('show');
         },
-        
+
         onSignedInOrPasswordResetRequestedOrSignedUp: function() {
             this.canceled = false;
             this.$el.modal('hide');
         },
-        
+
         onTabHeaderShown: function(e) {
             var anchor = e.target;
             if (anchor && anchor.hash) {
                 this.$(anchor.hash).putFocus();
             }
         },
-        
+
         onDialogShow: function() {
             this.canceled = true;
             this.$el.resetFields()
                 .hideSummaryError()
                 .hideFieldErrors();
         },
-        
+
         onDialogShown: function() {
             this.$el.putFocus();
         },
-        
+
         onDialogHidden: function () {
             if (this.canceled && this.cancel) {
                 this.cancel();
@@ -159,5 +166,5 @@ var Application;
             }
         }
     });
-    
-})(Backbone, Application || (Application = {}));
+
+})(_, Backbone, window.App || (window.App = {}));

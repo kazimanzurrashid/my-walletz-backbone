@@ -1,7 +1,12 @@
-﻿var Application;
+﻿/* jshint browser: true, curly: true, eqeqeq: true, forin: true, latedef: true,
+    newcap: true, noarg: true, noempty: true, nonew: true, strict:true,
+    undef: true, unused: true */
+/* global jQuery: false, _: false, Backbone: false */
 
-(function($, _, Backbone, Application) {
-    var Views = Application.Views || (Application.Views = {});
+(function($, _, Backbone, App) {
+    'use strict';
+
+    var Views = App.Views || (App.Views = {});
 
     function createListOptions(label, categories) {
         var options = _.map(categories, function(c) {
@@ -38,7 +43,7 @@
             this.currencyDisplay.text(account.get('currency'));
             this.cancelLink.prop(
                 'href',
-                Application.clientUrl(
+                App.clientUrl(
                     '/accounts',
                     account.id,
                     'transactions'));
@@ -47,19 +52,21 @@
         },
 
         populateCategories: function() {
+            var expenses, incomes;
+
+            expenses = this.categories.filter(function(c) {
+                return c.isExpense();
+            });
+
+            incomes = this.categories.filter(function(c) {
+                return c.isIncome();
+            });
+
             this.categoryList.empty()
                 .append($('<option/>', {
                     text: '[select]',
                     value: ''
                 }));
-
-            var expenses = this.categories.filter(function(c) {
-                return c.isExpense();
-            });
-
-            var incomes = this.categories.filter(function(c) {
-                return c.isIncome();
-            });
 
             if (expenses.length) {
                 this.categoryList.append(
@@ -81,11 +88,13 @@
         },
 
         onSave: function(e) {
+            var transaction = new App.Models.Transaction(),
+                self = this;
+
             e.preventDefault();
             this.form.hideFieldErrors();
 
-            var transaction = new Application.Models.Transaction();
-            Views.Helpers.subscribeModelInvalidEvent(transaction, this.form);
+            Views.helpers.subscribeModelInvalidEvent(transaction, this.form);
 
             if (!transaction.set(this.form.serializeFields(), {
                 validate: true,
@@ -94,14 +103,12 @@
                 return;
             }
 
-            var self = this;
-
             this.collection.create(transaction, {
                 wait: true,
                 validate: false,
                 success: function() {
                     self.router.navigate(
-                        Application.clientUrl(
+                        App.clientUrl(
                             '/accounts',
                             self.account.id,
                             'transactions'),
@@ -109,8 +116,11 @@
                     $.showSuccessbar('New transaction created.');
                 },
                 error: function(model, jqxhr) {
-                    if (Views.Helpers.hasModelErrors(jqxhr)) {
-                        var modelErrors = Views.Helpers.getModelErrors(jqxhr);
+                    var modelErrors;
+
+                    if (Views.helpers.hasModelErrors(jqxhr)) {
+                        modelErrors = Views.helpers.getModelErrors(jqxhr);
+
                         if (modelErrors) {
                             self.form.showFieldErrors({
                                 errors: modelErrors
@@ -127,4 +137,4 @@
 
     _.extend(Views.NewTransaction.prototype, Views.Activable);
 
-})(jQuery, _, Backbone, Application || (Application = {}));
+})(jQuery, _, Backbone, window.App || (window.App = {}));

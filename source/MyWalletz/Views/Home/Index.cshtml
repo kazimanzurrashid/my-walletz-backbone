@@ -18,11 +18,10 @@
 @section Scripts {
   @Scripts.Render("~/bundles/formatters", "~/bundles/backbone", "~/bundles/application")
   <script>
-    app = Application;
-    app.clientUrlPrefix = '@Html.Raw(Url.ClientUrlPrefix())';
-    app.serverUrlPrefix = '@Html.Raw(Url.ApiUrlPrefix())';
+    App.clientUrlPrefix = '@Html.Raw(Url.ClientUrlPrefix())';
+    App.serverUrlPrefix = '@Html.Raw(Url.ApiUrlPrefix())';
     jQuery(function() {
-      app.start({
+      App.start({
         userSignnedIn: @Html.Raw(Request.IsAuthenticated.ToString().ToLowerInvariant()),
         categories: @Html.Raw(Model.Categories.ToJson()),
         accounts: @Html.Raw(Model.Accounts.ToJson())

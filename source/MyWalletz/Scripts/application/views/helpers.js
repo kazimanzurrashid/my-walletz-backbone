@@ -1,9 +1,12 @@
-var Application;
+/* jshint browser: true, curly: true, eqeqeq: true, forin: true, latedef: true,
+    newcap: true, noarg: true, noempty: true, nonew: true, strict:true,
+    undef: true, unused: true */
+/* global jQuery: false, _: false, accounting: false, moment: false */
 
-(function ($, _, Application) {
-    var Views = Application.Views || (Application.Views = {});
+(function ($, _, accounting, moment, App) {
+    var Views = App.Views || (App.Views = {});
 
-    Views.Helpers = {
+    Views.helpers = {
         hasModelErrors: function(jqxhr) {
             return jqxhr.status === 400;
         },
@@ -41,8 +44,8 @@ var Application;
             });
         },
 
-        formatMoney: function(amount, symbol) {
-            if (typeof symbol === "undefined") {
+        formatMoney: function (amount, symbol) {
+            if (_.isUndefined(symbol)) {
                 symbol = '';
             }
 
@@ -60,10 +63,10 @@ var Application;
                 }
             });
         },
-        
+
         formatDate: function(date) {
             return date ? moment(date).format('MM/DD/YYYY') : '';
         }
     };
 
-})(jQuery, _, Application || (Application = {}));
+})(jQuery, _, accounting, moment, window.App || (window.App = {}));

@@ -9,7 +9,7 @@ describe('Components.DataGridRow', function() {
             foo: 'baz',
             bar: 'qux'
         });
-        row = new Application.Components.DataGridRow({
+        row = new App.Components.DataGridRow({
             template: _.template('<td>{{foo}}</td><td>{{bar}}</td>'),
             model: model
         });
@@ -85,7 +85,7 @@ describe('Components.DataGrid', function() {
     });
 
     beforeEach(function() {
-        dataGrid = new Application.Components.DataGrid({
+        dataGrid = new App.Components.DataGrid({
             el: el,
             rowTemplate: '#grid-row-template'
         });
@@ -98,7 +98,7 @@ describe('Components.DataGrid', function() {
 
         it('sets #rowInsertMode', function() {
             expect(dataGrid.rowInsertMode)
-                .to.equal(Application.Components.DomInsertMode.append);
+                .to.equal(App.Components.DomInsertMode.append);
         });
 
         it('sets #createAnimation', function() {

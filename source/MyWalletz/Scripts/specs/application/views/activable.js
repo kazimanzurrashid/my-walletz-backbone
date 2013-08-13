@@ -19,7 +19,7 @@ var DummmyView = (function () {
     return DummmyView;
 })();
 
-_.extend(DummmyView.prototype, Application.Views.Activable);
+_.extend(DummmyView.prototype, App.Views.Activable);
 
 describe('Views.Activable', function() {
     var activable;

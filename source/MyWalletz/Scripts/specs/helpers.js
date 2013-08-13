@@ -1,9 +1,9 @@
-var Application;
+var App;
 
-(function (Application) {
-    Application.clientUrlPrefix = '#!/';
-    Application.serverUrlPrefix = '/api';
-})(Application || (Application = {}));
+(function (App) {
+    App.clientUrlPrefix = '#!/';
+    App.serverUrlPrefix = '/api';
+})(window.App || (window.App = {}));
 
 function repeatString(length, character) {
     if (typeof length === "undefined") {
